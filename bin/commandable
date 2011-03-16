@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
+require 'commandable'
+Commandable.color_output = true
+Commandable.verbose_parameters = false
+Commandable.app_name = "commandable"
+Commandable.app_info =
+"""
+  Commandable - The easiest way to add command line control to your app.
+  Copyrighted free software - Copyright (c) 2011 Mike Bethany.
+"""
+Commandable.execute(ARGV)
