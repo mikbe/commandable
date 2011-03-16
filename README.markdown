@@ -357,6 +357,7 @@ Still working on:
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
 * Method aliases cleanly added.
 * Better formatting of help instructions, the existing one is uglier than sin.
+* Use the first line of comments below `command` as the description text.
 
 ###Future versions:
 

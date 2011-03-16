@@ -292,6 +292,8 @@ module Commandable
 
   # Trap method creation after a command call 
   def method_added(meth)
+    return super(meth) if meth == :initialize
+    
     set_trace_func(nil)
     @@cmd_parameters.merge!(:parameters=>self.instance_method(meth).parameters,:class_method=>false)
     add_command(meth)

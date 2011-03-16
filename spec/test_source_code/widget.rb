@@ -4,12 +4,24 @@ require 'commandable'
 class Widget
   extend Commandable
 
-  def initialize(name)
-    @name = name
+  # You shouldn't try to use initialize in a class you want to make Commandable.
+  # Commandable creates a new class automatically for instance methods so if you
+  # have any parameters for your initialize it will raise an error. In fact I can't
+  # even trap initialize properly because the Commandable module isn't initialized
+  # until after your class has been initialized.
+  # 
+  # Think of the classes you let Commandable control as entry points to your app.
+  # Don't try to have Commandable do a lot of class creation and manipulation of
+  # your application, just have the methods you call do all that.
+  def initialize
+    puts "Widget Initialized!"
   end
 
   command "create a new widget", :default, :priority=>10
-  def name(name)
+  # You can however override the new command because when your
+  # method gets called the class will already be initialized. 
+  def self.new(name)
+    puts "name: #{name}"
     puts "You named your widget: #{name}"
   end
 
@@ -24,5 +36,3 @@ class Widget
   end
 
 end
-
-johnny5 = Widget.new("Johnny 5")

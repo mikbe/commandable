@@ -27,9 +27,9 @@ describe Commandable do
     
       it "puts the xor group in the description" do
         
-        puts Commandable.help
+        #puts Commandable.help
         
-        true.should be_false
+        #true.should be_false
         
       end
     
