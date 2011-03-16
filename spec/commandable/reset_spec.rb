@@ -4,7 +4,7 @@ describe Commandable do
 
   before(:each) do
     Commandable.reset_all
-    load 'parameter_class1.rb'
+    load 'parameter_class.rb'
     Commandable.app_name = "mycoolapp"
     Commandable.app_info = 
 """  My Cool App - It does stuff and things!

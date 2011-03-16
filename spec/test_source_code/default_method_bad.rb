@@ -11,6 +11,5 @@ class DefaultMethodsBad
   command 'does some other stuff', :default
   def default_method2
   end 
-  
 
 end

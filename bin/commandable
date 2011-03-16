@@ -6,7 +6,12 @@ Commandable.verbose_parameters = false
 Commandable.app_name = "commandable"
 Commandable.app_info =
 """
-  Commandable - The easiest way to add command line control to your app.
+  \e[92mCommandable\e[0m - The easiest way to add command line control to your app.
   Copyrighted free software - Copyright (c) 2011 Mike Bethany.
 """
+
+# App controller has to be loaded after commandable settings
+# or it won't be able to use the settings
+require 'commandable/app_controller'
+
 Commandable.execute(ARGV)

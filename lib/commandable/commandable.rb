@@ -1,4 +1,5 @@
 require 'term/ansicolor'
+require 'set'
 
 # This library allows you to incredibly easily make 
 # your methods directly available from the command line.
@@ -135,13 +136,14 @@ module Commandable
       end
       arguments << "help" if arguments.empty?
       
+      # Parse the commad line into methods and their parameters
       arguments.each do |arg|
         if Commandable[arg]
           last_method = arg.to_sym
           method_hash.merge!(last_method=>[])
         else
           unless last_method
-            default = @@commands.select {|key, value| value[:default]}
+            default = find_by_subkey(:default)
             raise UnknownCommandError, arguments.first if default.empty?
             last_method = default.keys.first
             method_hash.merge!(last_method=>[])
@@ -153,13 +155,18 @@ module Commandable
         end
       end
 
+      # Build an array of procs to be called for each method and its given parameters
       proc_array = []
       method_hash.each do |meth, params|
         command = @@commands[meth]
+        
+        # Test for duplicate XORs
+        proc_array.select{|x| x[:xor] and x[:xor]==command[:xor] }.each {|bad| raise ExclusiveMethodClashError, "#{meth}, #{bad[:method]}"}
+
         klass = Object
         command[:class].split(/::/).each { |name| klass = klass.const_get(name) }
         klass = klass.new unless command[:class_method]
-        proc_array << {:method=>meth, :parameters=>params, :priority=>@@cmd_parameters[:priority], :proc=>lambda{klass.send(meth, *params)}}
+        proc_array << {:method=>meth, :xor=>command[:xor], :parameters=>params, :priority=>@@cmd_parameters[:priority], :proc=>lambda{klass.send(meth, *params)}}
       end
       proc_array.sort{|a,b| a[:priority] <=> b[:priority]}.reverse
     end
@@ -188,6 +195,15 @@ module Commandable
     end
 
     private 
+    
+    # Look through commands for a specific subkey
+    def find_by_subkey(key, value=true)
+      @@commands.select {|meth, meth_value| meth_value[key]==value}
+    end
+    # Look through command subkeys using a hash
+    def find_by_subhash(hash)
+    
+    end
     
     # Changes the colors used when print the help/usage instructions to those set by the user.
     def set_colors
@@ -231,7 +247,11 @@ module Commandable
     while (param = cmd_parameters.shift)
       case param
         when Symbol
-          @@cmd_parameters.merge!(param=>true)
+          if param == :xor
+            @@cmd_parameters.merge!(param=>:xor)
+          else
+            @@cmd_parameters.merge!(param=>true)
+          end
         when Hash
           @@cmd_parameters.merge!(param)
         when String
@@ -295,7 +315,6 @@ module Commandable
         when :req
           parameter_string += " #{arg}"
         when :opt
-          puts "Commandable.verbose_parameters: #{Commandable.verbose_parameters}"
           if Commandable.verbose_parameters
             # figure out what the default value is
             method_definition ||= readline(@@method_file, @@method_line)

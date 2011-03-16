@@ -12,9 +12,9 @@ module Commandable
         `open #{File.expand_path((File.dirname(__FILE__) + '/../../readme.markdown'))}`
       end
       
-      command "creates a simple example app"
+      command "create an exampe app with lots of examples"
       # Creates a simple example app
-      def make_example(location="./cmd_exp")
+      def examples(path="./cmdx")
       
       end
       

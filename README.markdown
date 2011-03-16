@@ -1,9 +1,14 @@
 # Commandable
-The easiest way to add command line control to your app. If you don't find Commandable incredibly easy to use I will give you one billions dollars!* (*not legally binding)
+The easiest way to add command line control to your app. If you don't find Commandable incredibly easy to use I will give you one billions dollars!* (*not a legally binding offer)
 
-Stop wasting time writing wet command line interpreters or even writing code for the existing ones. Now you can add a single line above an existing method and that method will be available from the command line. Best of all the help/usage instructions are automatically generated using the method itself.
+Stop wasting time writing wet command line interpreters or even writing code for the existing ones. Then writing help functions that you have to constantly change as your code changes. Now you can add a single line above an existing method and that method will be available from the command line. Best of all the help/usage instructions are automatically generated using the method itself so if you change your methods the help instructions change without any more effort on your part!
 
-The whole process can be as little as four lines of code: a line of code above your method, a require for the Commandable gem, an "extend Commandable" in your class, and a call to execute the command line arguments (ARGV) in your bin file. 
+The whole process can take as little as four lines of code:  
+
+* You put a `command "I do something!"` line above your method.
+* Add a `require commandable` line somewhere (I'd put it in my bin).
+* Then an `extend Commandable` inside your class.
+* And finally a call to `Commandable.execute(ARGV)` in your bin file. 
 
 Don't think of Commandable as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that means one thing in one program and something else in another. You can now "use your words" to let people interact with your apps in a natural way.
 
@@ -15,7 +20,7 @@ From the command line:
     
 ## Usage Instructions
 
-After installing the `Commandable` gem require it:
+After installing the `Commandable` gem require it somewhere that gets loaded before your class does:
 
     require 'commandable'
 
@@ -24,7 +29,7 @@ Extend your class with the `Commandable` module:
     class Widget
       extend Commandable
     
-Put `command` and a description above a method you want to make accessible. The description is optional but can be helpful
+Then put `command` and a description above the method you want to make accessible. The description is optional but can be helpful
 since it's used when automatically building your help/usage instructions.
 
       command "create a new widget"
@@ -32,32 +37,42 @@ since it's used when automatically building your help/usage instructions.
         ...
       end
 
-### The "command" command
+### The "`command`" command and its options
 
-    command ["description"], [:required], [:default], [:priority=>[0...n]]
+    command ["description"], [:required], [:default], [:priority=>(0...n)], [:xor[=>:group_name]]
 
-_**command**_  
-This is the only thing that's required. It tells Commandable to add the following method to the list of methods available from the command line.
+_**command**_ _(required)_  
+This is the only thing that's required. It tells Commandable to add the method that follows to the list of methods available from the command line.
 
-_**description**_  
-This will print in the help/usage instructions that get printed when a user calls your programing with the command "help" or if they try to issue a command that doesn't exist.
+_**description**_ [optional]  
+As you would imagine this is a short description of what the method does. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).
 
-_**:required**_  
-You can mark a method as required and the user must specify the command and any required parameters every time they run your app.
+_**:required**_ [optional]  
+You can mark a method as required and the user must specify this command and any required parameters every time they run your app. Note that while you can have a method marked as both :default and :required that would be kind of pointless since :required means they have to type out the name of the function and :default means they don't.
 
-_**:default**_  
-You can have one and only one default method. This method will be called if your app is called with just parameters or if the first command line parameter isn't a command. The user can still give more commands after the parameters for the default command too!
+_**:default**_ [optional]  
+You can have one and only one default method. This method will be called if your app is called with just parameters or if the first command line parameter isn't a command. The user can still give more commands after the parameters for the default command too.
  
 For instance say your default method is :foo that takes one parameter and you have another method called :bar that also takes one parameter. A user could do this:
 
     yourapp "Some Parameter" bar "A parameter for bar"
 
-_**priority=>n**_  
-This optional setting allows you to assign priorities to your methods so if you need them to be executed in a specific order regardless of how the user specifies them on the command line you can use this and when you execute the command line or ask for a queue of commands they will be sorted for you by priority.
+Just be aware that if they give an option that has the same name as a function the app will think it's a command.
+
+_**priority=>n**_ [optional]  
+This optional setting allows you to assign priorities to your methods so if you need them to be executed in a specific order, regardless of how the user specifies them on the command line, you can use this. Then when you execute the command line or ask for a queue of commands they will be sorted for you by priority.
 
 The higher the priority the sooner the method will be executed. If you do not specify a priority a method will have a priority of 0, the lowest priority. 
 
 Note that you can have a default method with a lower priority than a non-default method.
+
+_**:xor[=>:whatever]**_ [optional]  
+The :xor parameter allows you to configure a group of methods as mutually exclusive, i.e. if method1 and method2 are in the same :xor group the user of your application can only call one of them at a time.
+
+You can use just the :xor symbol and the method will be put into the default XOR group, called :xor so :xor=>:xor, but if you need multiple XOR groups you can specify a group name by using a hash instead of just the :xor symbol.
+
+The XOR group name will be printed in the front to the description text so it's probably a good idea to use :xor as the prefix.
+
 
 ### Parameter lists
 The parameter lists for each method that are printed out in the usage/help instructions are are built using the names you give them so you should make sure to use descriptive names. Also keep in mind that all command line parameters are strings so you need to deal with that inside your methods if what you really want is a number.
@@ -71,9 +86,19 @@ A complete class might look like this:
     class Widget
       extend Commandable
 
-      command "create a new widget"
+      command "create a new widget", :default, :priority=>10
       def new(name)
         "You made a widget named: #{name}"
+      end
+
+      command "destroy an existing widget", :xor
+      def disassemble(name)
+        "No dissaemble #{name}! #{name} is alive!"
+      end
+      
+      command "spend lots of money to update a widget", :xor
+      def upgrade(name)
+        "You just gave #{name} a nice new coat of paint!"
       end
 
     end
@@ -123,9 +148,15 @@ If you want to do a block of class commands using class << self you need to put 
 
 Note: Class methods are called directly on the class while instance methods have an instance created for that call. Keep that in mind if you need to share data between calls. In that case you might want to store your data in a model you create outside the execution queue.
 
-### Options
+### Example classess ###
+To see a huge number of possible configurations run the following command and an application will be created with a bunch of examples:
 
-There are basic options you will want to be aware of. Specifically you really want to set Commandable#app\_name and Commandable#app\_info so that the help/usage instructions are fully fleshed out.
+    $ commandable examples [path]
+
+
+### Commandable Options
+
+There are the basic options you will want to be aware of. Specifically you really want to set Commandable#app\_name and Commandable#app\_info so that the help/usage instructions are fully fleshed out.
 
 **Commandable.app\_name**  
 _default = ""_  
@@ -148,7 +179,7 @@ If set to false help instructions will not print out default values.
     # Will print:
     command arg1 [arg2]
 
-### Colorized Output
+### Colorized Output Options
 
 The help information can be colored using the standard ANSI escape commands found in the term-ansicolor-hi gem.
 
@@ -300,19 +331,32 @@ Simply configure your bin file to run Commandable#execute:
     return_values = Commandable.execute(ARGV)
     # do stuff
 
-# To Do
+
+## In closing... ##
+
+One really cool thing about this design is you can add extend another app that uses Commandable and add your own methods without having to crack open their code.
+
+This is the first public release so it's still very newish. You know the saying, "It doesn't work for you? But it works great on my computer!"
+
+The code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out in beta.
+
+If you have any questions about how the code works I've tried to give as much info in these docs as possible but I am also an OCD level commenter so you should be able to find fairly good explanations of what I'm doing in the code.
+
+Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I hate people that don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
+
+
+## To Do
 
 Still working on:
 
 * Example app.
-* Load README from AppController.
 
 ###Next version:
 
-* Massive refactoring. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out in beta.  
+* Massive refactoring.   
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
 * Method aliases cleanly added.
-* Better formatting of help instructions.
+* Better formatting of help instructions, the existing one is uglier than sin.
 
 ###Future versions:
 

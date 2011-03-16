@@ -10,13 +10,13 @@ describe Commandable do
     
     it "prints short parameters when false" do
       Commandable.verbose_parameters = false
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.help.to_s.should_not match("1492")
     end
     
     it "prints short parameters when false" do
       Commandable.verbose_parameters = true
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.help.to_s.should match("1492")
     end
     
@@ -29,13 +29,13 @@ describe Commandable do
     end
   
     it "has still has the help command after Commandable is cleared" do
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.clear_commands
       Commandable.commands.first[0].should == :help
     end
     
     it "always has the help command as the last command (so it's pretty)" do
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.help.compact.last.should match(/help/)
     end
   
@@ -43,18 +43,18 @@ describe Commandable do
 
   context "formating the help message" do
     it "formats a basic help message" do
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.help.to_s.should match(/Usage:(.*)Command(.*)foo(.*)bar(.*)qux(.*)baz(.*)help/)
      end
 
     it "adds the application name to the help output if it's given" do
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.app_name = "mycoolapp"
       Commandable.help.to_s.should match(/Usage: mycoolapp <command>/)
     end
 
     it "adds appliction information if given" do
-      load 'parameter_class1.rb'
+      load 'parameter_class.rb'
       Commandable.app_name = "mycoolapp"
       app_info = 
 """
@@ -75,7 +75,7 @@ describe Commandable do
   context "when using color_output" do
 
     before(:each) do 
-      load 'private_methods.rb'
+      load 'private_methods_bad.rb'
       Commandable.app_name = "mycoolapp"
       Commandable.app_info = 
 """  My Cool App - It does stuff and things!

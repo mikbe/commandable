@@ -5,7 +5,7 @@ class DefaultMethodNoParams
   extend Commandable
   
   command 'does some stuff', :default
-  def default_method_no
+  def default_no_params
     "default method called, has no params"
   end 
   

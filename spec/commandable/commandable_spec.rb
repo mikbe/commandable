@@ -6,7 +6,7 @@ describe Commandable do
 
   context "basic functionality" do
 
-    before(:each) { load 'test_class1.rb' }
+    before(:each) { load 'test_class.rb' }
 
     context "when clearing values" do
       specify { lambda{Commandable.clear_commands}.should_not raise_error}
@@ -14,7 +14,7 @@ describe Commandable do
     end
 
     context "when adding command to methods" do
-      specify { lambda{load 'test_class1.rb'}.should_not raise_error }
+      specify { lambda{load 'test_class.rb'}.should_not raise_error }
     end
 
     context "when checking syntax" do
@@ -24,7 +24,7 @@ describe Commandable do
       end
     
       it "rasies an error if no method follows a description" do
-        lambda{load 'bad_class1.rb'}.should raise_error(Commandable::SyntaxError)
+        lambda{load 'class_bad.rb'}.should raise_error(Commandable::SyntaxError)
       end
 
     end
@@ -36,26 +36,26 @@ describe Commandable do
       end
     
       it "allows access to methods using []" do
-        lambda{Commandable["method1"]}.should_not raise_error
+        lambda{Commandable["test_method"]}.should_not raise_error
       end
     
       context "when using []" do
     
-        specify { Commandable["method1"].should_not be_nil }
-        specify { Commandable[:method1].should_not be_nil }
+        specify { Commandable["test_method"].should_not be_nil }
+        specify { Commandable[:test_method].should_not be_nil }
         specify { lambda{Commandable[1]}.should raise_error }
         specify { lambda{Commandable[String]}.should raise_error }
       
         context "when using a variable" do
 
           specify {
-            method1 = "method1"
-            Commandable[method1].should_not be_nil
+            method = "method"
+            Commandable[:test_method].should_not be_nil
           }
 
           specify {
-            method1 = :method1
-            Commandable[method1].should_not be_nil
+            method = :method
+            Commandable[:test_method].should_not be_nil
           }
       
         end
@@ -67,7 +67,7 @@ describe Commandable do
     context "when accessing method information" do
     
       it "uses a string in #[] to access methods by name" do
-        lambda{Commandable["method1"]}.should_not raise_error
+        lambda{Commandable["test_method"]}.should_not raise_error
       end
     
     end
@@ -75,7 +75,7 @@ describe Commandable do
     context "when accessing method descriptions" do
 
       it "uses :descriptions" do
-        Commandable["method1"][:description].should == "does some stuff"
+        Commandable["test_method"][:description].should == "does some stuff"
       end
     
     end
@@ -83,12 +83,12 @@ describe Commandable do
     context "when reading class names" do
      
       it "uses :class" do
-        Commandable["method1"][:class].should == "TestClass1"
+        Commandable["test_method"][:class].should == "TestClass"
       end
          
       it "reads the fully qualified name including parent modules and classes" do
-        load 'deep_class1.rb' 
-        Commandable["deep_method1"][:class].should == "TopModule::ParentClass::DeepClass1"
+        load 'deep_class.rb' 
+        Commandable["deep_method"][:class].should == "TopModule::ParentClass::DeepClass"
       end
 
     end
@@ -97,7 +97,7 @@ describe Commandable do
 
   context "when reading the method parameters" do
     
-    before(:each) { load 'parameter_class1.rb' }
+    before(:each) { load 'parameter_class.rb' }
     
     context "when it has required parameters" do
       specify{ Commandable[:foo][:argument_list].should == "int_arg1 number_arg2" }
@@ -141,7 +141,6 @@ describe Commandable do
       specify {Commandable[:class_bar][:argument_list].should == %q{int_arg1 [string_arg2="Number 42"]} }
       specify {Commandable[:class_qux][:argument_list].should == %q{[string_arg1="1492"] [string_arg2="I'm a tricky one"]} }
       specify {Commandable[:class_baz][:argument_list].should == %q{number_arg1 [string_arg2="blorp"] *array_arg3} }
-      specify {Commandable[:class_quuxx][:argument_list].should == %q{decimal_arg1 *array_arg2 &block_arg3} }
     
     end
     
@@ -207,12 +206,12 @@ describe Commandable do
     
     it "executes the command" do
       load "super_deep_class.rb"
-      lambda{Commandable.execution_queue(["deep_method1"]).first[:proc].call}.should_not raise_error
+      lambda{Commandable.execution_queue(["super_deep_method"]).first[:proc].call}.should_not raise_error
     end
 
     it "returns the correct value" do
       load "super_deep_class.rb"
-      Commandable.execution_queue(["deep_method1"]).first[:proc].call.should == "you called a deep method"
+      Commandable.execution_queue(["super_deep_method"]).first[:proc].call.should == "you called a deep method"
     end
     
   end

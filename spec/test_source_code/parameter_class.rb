@@ -1,7 +1,7 @@
 $:.unshift File.expand_path((File.dirname(__FILE__) + '/../../lib'))
 require "commandable"
 
-class ParameterClass1
+class ParameterClass
   extend Commandable
 
   command "hello world"

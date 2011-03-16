@@ -13,7 +13,7 @@ class ClassMethods
   command "another one"
   class << self
     def class_method2(integer_arg1)
-      
+      integer_arg1
     end
   end
 

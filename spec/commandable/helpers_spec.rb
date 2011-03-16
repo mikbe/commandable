@@ -4,7 +4,7 @@ describe Commandable do
 
   context "when parsing optional parameters" do
     
-    before(:each) {load 'private_methods.rb'}
+    before(:each) {load 'private_methods_bad.rb'}
     
     specify {PrivateMethods.send(:parse_optional, "def bar(x=14243)", "x").should == "14243"} 
     specify {PrivateMethods.send(:parse_optional,"def bar x = 144444", "x").should == "144444"}

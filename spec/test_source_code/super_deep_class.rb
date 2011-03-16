@@ -8,12 +8,12 @@ module TopModule
         module OhYesIDid
           module TwoSnapsUpIn
             class ACircle
-              module Exlamation
+              module Exclamation
                 module OKEvenImBoredNow
-                  class DeepClass1
+                  class DeepDeepClass
                     extend Commandable
-                    command 'this is a deep method call'
-                    def deep_method1
+                    command 'this is a really deep method call'
+                    def super_deep_method
                       "you called a deep method"
                     end 
                   end

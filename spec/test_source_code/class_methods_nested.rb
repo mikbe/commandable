@@ -6,12 +6,12 @@ class ClassMethodsNested
   class << self
     extend Commandable
     
-    command "hello world"
+    command "class foo, look at you!"
     def class_foo(int_arg1, number_arg2)
       [int_arg1, number_arg2]
     end
 
-    command "look a function"
+    command "classy bar? probably not"
     def class_bar(int_arg1, string_arg2="Number 42")
       [int_arg1, string_arg2]
     end
@@ -25,13 +25,7 @@ class ClassMethodsNested
     def class_baz number_arg1, string_arg2 = "blorp", *array_arg3
       [number_arg1, string_arg2, array_arg3]
     end
-      
-    command "how would you even send a block on the command line?"
-    def class_quuxx decimal_arg1, *array_arg2, &block_arg3
-      yield [decimal_arg1, array_arg2]
-    end
-
-
+ 
   end
 
 end

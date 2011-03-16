@@ -11,7 +11,7 @@ describe Commandable do
   Copyright (c) 2011 Acme Inc.
 """
 
-    load 'parameter_class1.rb'
+    load 'parameter_class.rb'
   }
 
   context "when parsing arguments" do
