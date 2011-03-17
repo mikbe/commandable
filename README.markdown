@@ -379,7 +379,7 @@ Still working on for this version:
 
 ###Next version:
 
-* Massive refactoring.   
+* Needs a massive refactoring.   
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
 * Try to see if I can figure out how to trap aliases without without an additional `command` use
 * Better formatting of help instructions, the existing one is fairly ugly.
