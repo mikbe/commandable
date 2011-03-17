@@ -11,10 +11,10 @@ class XorClass
 
   command 'another normal method'
   def normal_method2
-    "normal_method"
+    "normal_method2"
   end
 
-  command 'part of the default :xor group', :xor
+  command 'part of the default :xor group', :xor, :default
   def xor_method1
     "xor_method1"
   end

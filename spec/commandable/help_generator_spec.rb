@@ -22,13 +22,13 @@ describe Commandable do
     
   end
 
-  context "when looking at the help command" do
+  context "when generating the help command" do
 
     it "has a help command when no commands have been added" do
       Commandable.commands.first[0].should == :help
     end
   
-    it "has still has the help command after Commandable is cleared" do
+    it "still has the help command after Commandable is cleared" do
       load 'parameter_class.rb'
       Commandable.clear_commands
       Commandable.commands.first[0].should == :help
@@ -41,11 +41,12 @@ describe Commandable do
   
   end
 
-  context "formating the help message" do
-    it "formats a basic help message" do
+  context "when formating the help message" do
+    
+    it "formats a basic help message with commands sorted alphabetically (help last)" do
       load 'parameter_class.rb'
-      Commandable.help.to_s.should match(/Usage:(.*)Command(.*)foo(.*)bar(.*)qux(.*)baz(.*)help/)
-     end
+      Commandable.help.to_s.should match(/Usage:(.*)Command(.*)bar(.*)baz(.*)foo(.*)qux(.*)help/)
+    end
 
     it "adds the application name to the help output if it's given" do
       load 'parameter_class.rb'
@@ -70,6 +71,36 @@ describe Commandable do
       Commandable.help.to_s.should match(/\(default\)/)
     end
 
+    context "and there are no parameters" do
+      
+      before(:each){load 'parameter_free.rb' }
+      
+      it "hides the Parameters header" do
+        execute_output_s([]).should_not match(/Command Parameters/)
+      end
+
+      it "hides the doesn't show [parameters] in the usage instructions" do
+        Commandable.app_name = "fakeapp"
+        execute_output_s([]).should_not match(/\[parameters\]/)
+      end
+
+
+    end
+    
+    context "and there is a new line in a description" do
+      
+      it "indents the new line to match the preceding line" do
+        load("multi_line_description.rb")
+        execute_output_s(["blah"]).should match(/                                  so you can have really long descriptions\n                                  And another line/)
+      end
+      
+      it "indents the new line to match the preceding line" do
+        load("multi_line_description_no_params.rb")
+        execute_output_s(["blah"]).should match(/                                 so you can have really long descriptions\n                                 And another line/)
+      end
+      
+    end
+    
   end
 
   context "when using color_output" do
@@ -83,10 +114,9 @@ describe Commandable do
     end
 
     let(:c) {Term::ANSIColor}
-    let(:plain) {["\e[H\e[2J", "  My Cool App - It does stuff and things!\n  Copyright (c) 2011 Acme Inc.", "", "  Usage: mycoolapp [command] [parameters] [[command] [parameters]...]", "", "Command Parameter(s)  Description", "   help               : you're looking at it now"]}
-    let(:default_color) {["\e[H\e[2J", "\e[97m\e[1m  My Cool App - It does stuff and things!\n  Copyright (c) 2011 Acme Inc.\e[0m", "", "  \e[90m\e[1mUsage:\e[0m \e[92m\e[1mmycoolapp\e[0m [\e[93m\e[1mcommand\e[0m] [\e[96m\e[1mparameters\e[0m] [[\e[93m\e[1mcommand\e[0m] [\e[96m\e[1mparameters\e[0m]...]", "", "\e[93m\e[1mCommand\e[0m \e[96m\e[1mParameter(s)\e[0m  \e[97m\e[1mDescription\e[0m", "   \e[93mhelp\e[0m \e[96m\e[0m              : \e[97myou're looking at it now\e[0m"]}
     
     it "changes the output if color is enabled" do
+      Commandable.color_output = false
       lambda {Commandable.color_output = true}.should change{Commandable.help}
     end
 

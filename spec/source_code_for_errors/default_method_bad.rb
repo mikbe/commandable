@@ -6,10 +6,12 @@ class DefaultMethodsBad
   
   command 'does some stuff', :default
   def default_method
+    "default_method"
   end 
   
   command 'does some other stuff', :default
   def default_method2
+    "default_method2"
   end 
 
 end

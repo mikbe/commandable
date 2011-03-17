@@ -91,20 +91,46 @@ module Commandable
     def help(additional_info=nil)
       
       set_colors
-      array =  ["  #{@c_usage}Usage:#{@c_reset} #{@c_app_name + app_name + @c_reset + " <#{@c_command + @c_bold}command#{@c_reset}> [#{@c_parameter + @c_bold}parameters#{@c_reset}] [<#{@c_command + @c_bold}command#{@c_reset}> [#{@c_parameter + @c_bold}parameters#{@c_reset}]...]" if Commandable.app_name}", ""]
+      
+      cmd_length = "Command".length
+      parm_length = "Parameters".length
+      max_command = [(@@commands.keys.max_by{|key| key.to_s.length }).to_s.length, cmd_length].max
+      max_parameter = @@commands[@@commands.keys.max_by{|key| @@commands[key][:argument_list].length }][:argument_list].length
+      max_parameter = [parm_length, max_parameter].max if max_parameter > 0
+
+      usage_text = "  #{@c_usage}Usage:#{@c_reset} "
+
+      if Commandable.app_name      
+        cmd_text = "<#{@c_command + @c_bold}command#{@c_reset}>"
+        parm_text = " [#{@c_parameter + @c_bold}parameters#{@c_reset}]" if max_parameter > 0
+        usage_text += "#{@c_app_name + app_name + @c_reset} #{cmd_text}#{parm_text} [#{cmd_text}#{parm_text}...]"
+      end
+
+      array =  [usage_text, ""]
+      
       array.unshift additional_info if additional_info
       array.unshift ("\e[2A" + @c_app_info + Commandable.app_info + @c_reset) if Commandable.app_info
       array.unshift "\e[H\e[2J"
       
-      cmd_length = "Command".length
-      parm_length = "Parameter(s)".length
-      max_command = [(@@commands.keys.max_by{|key| key.to_s.length }).to_s.length, cmd_length].max
-      max_parameter = [@@commands[@@commands.keys.max_by{|key| @@commands[key][:argument_list].length }][:argument_list].length, parm_length].max
+      header_text = " #{" "*(max_command-cmd_length)}#{@c_command + @c_bold}Command#{@c_reset} "
+      header_text += "#{@c_parameter + @c_bold}Parameters #{@c_reset}#{" "*(max_parameter-parm_length)}" if max_parameter > 0
+      header_text += "#{@c_description + @c_bold}Description#{@c_reset}"
       
-      array << " #{" "*(max_command-cmd_length)}#{@c_command + @c_bold}Command#{@c_reset} #{@c_parameter + @c_bold}Parameter(s) #{@c_reset}#{" "*(max_parameter-parm_length)}#{@c_description + @c_bold}Description#{@c_reset}"
+      array << header_text
+      
       array += @@commands.keys.collect do |key|
         default = (@@default_method and key == @@default_method.keys[0]) ? @color_bold : ""
-        " #{" "*(max_command-key.length)}#{@c_command + default + key.to_s + @c_reset} #{default + @c_parameter + @@commands[key][:argument_list] + @c_reset}#{" "*(max_parameter-@@commands[key][:argument_list].length)} : #{default + @c_description}#{@@commands[key][:description]}#{" (default)" unless default == ""}#{@c_reset}" 
+        
+        help_line  = " #{" "*(max_command-key.length)}#{@c_command + default + key.to_s + @c_reset}"+
+                     " #{default + @c_parameter + @@commands[key][:argument_list] + @c_reset}"
+        help_line += "#{" "*(max_parameter-@@commands[key][:argument_list].length)} " if max_parameter > 0
+        
+        # indent new lines
+        description = @@commands[key][:description].gsub("\n", "\n" + (" "*(max_command + max_parameter + (max_parameter > 0 ? 1 : 0) + 4)))
+        
+        help_line += ": #{default + @c_description}#{"<#{@@commands[key][:xor]}> " if @@commands[key][:xor]}" +
+                     "#{description}" +
+                     "#{" (default)" unless default == ""}#{@c_reset}" 
       end
       array << nil
     end
@@ -114,13 +140,23 @@ module Commandable
     # of availavle methods with usage instructios and exit gracefully.
     def execute(argv)
       begin
-        command_array = execution_queue(argv)
-        command_array.each do |com|
+        command_queue = execution_queue(argv)
+        command_queue.each do |com|
           puts com[:proc].call
         end
       rescue Exception => exception
+      if exception.respond_to?(:friendly_name)
         set_colors
-        puts help("\n  #{@c_error_word}Error:#{@c_reset} #{@c_error_name}#{exception.friendly_name}#{@c_reset}\n  #{@c_error_description}#{exception.message}#{@c_reset}\n\n")
+        puts help("  #{@c_error_word}Error:#{@c_reset} #{@c_error_name}#{exception.friendly_name}#{@c_reset}\n  #{@c_error_description}#{exception.message}#{@c_reset}\n\n")
+      else
+      #rescue Exception => exception
+      
+        puts "\n Bleep, bloop, bleep! Danger Will Robinson! Danger!"
+        puts "\n Error: #{exception.inspect}"
+        puts "\n Backtrace:"
+        puts exception.backtrace.collect{|line| " #{line}"}
+        puts
+      end
       end
     end
     
@@ -144,7 +180,13 @@ module Commandable
         else
           unless last_method
             default = find_by_subkey(:default)
+
+            # Raise an error if there is no default method and the first item isn't a method
             raise UnknownCommandError, arguments.first if default.empty?
+            
+            # Raise an error if there is a default method but it doesn't take any parameters
+            raise UnknownCommandError, (arguments.first) if default.values[0][:argument_list] == ""
+            
             last_method = default.keys.first
             method_hash.merge!(last_method=>[])
           end
@@ -166,7 +208,7 @@ module Commandable
         klass = Object
         command[:class].split(/::/).each { |name| klass = klass.const_get(name) }
         klass = klass.new unless command[:class_method]
-        proc_array << {:method=>meth, :xor=>command[:xor], :parameters=>params, :priority=>@@cmd_parameters[:priority], :proc=>lambda{klass.send(meth, *params)}}
+        proc_array << {:method=>meth, :xor=>command[:xor], :parameters=>params, :priority=>command[:priority], :proc=>lambda{klass.send(meth, *params)}}
       end
       proc_array.sort{|a,b| a[:priority] <=> b[:priority]}.reverse
     end
@@ -200,10 +242,6 @@ module Commandable
     def find_by_subkey(key, value=true)
       @@commands.select {|meth, meth_value| meth_value[key]==value}
     end
-    # Look through command subkeys using a hash
-    def find_by_subhash(hash)
-    
-    end
     
     # Changes the colors used when print the help/usage instructions to those set by the user.
     def set_colors
@@ -233,12 +271,13 @@ module Commandable
 
   private 
   
-  # Add a method to the list of command line methods
+  # This is where the magic happens!
+  # It lets you add a method to the list of command line methods
   def command(*cmd_parameters)
 
     @@method_file = nil
     @@method_line = nil
-    @@cmd_parameters = {}
+    @@command_options = {}
     
     # Include Commandable in singleton classes so class level methods work
     include Commandable unless self.include? Commandable
@@ -248,20 +287,20 @@ module Commandable
       case param
         when Symbol
           if param == :xor
-            @@cmd_parameters.merge!(param=>:xor)
+            @@command_options.merge!(param=>:xor)
           else
-            @@cmd_parameters.merge!(param=>true)
+            @@command_options.merge!(param=>true)
           end
         when Hash
-          @@cmd_parameters.merge!(param)
+          @@command_options.merge!(param)
         when String
-          @@cmd_parameters.merge!(:description=>param)
+          @@command_options.merge!(:description=>param)
       end
     end
-    @@cmd_parameters[:priority] ||= 0
+    @@command_options[:priority] ||= 0
     
     # only one default allowed
-    raise ConfigurationError, "Only one default method is allowed."  if @@default_method and @@cmd_parameters[:default]
+    raise ConfigurationError, "Only one default method is allowed."  if @@default_method and @@command_options[:default]
     
     set_trace_func proc { |event, file, line, id, binding, classname|
 
@@ -283,26 +322,30 @@ module Commandable
   # Add a method to the list of available command line methods
   def add_command(meth)
     @@commands.delete(:help)
-    argument_list = parse_arguments(@@cmd_parameters[:parameters])
-    @@cmd_parameters.merge!(:argument_list=>argument_list,:class => self.name)
-    @@commands.merge!(meth => @@cmd_parameters)
-    @@default_method = {meth => @@cmd_parameters} if @@cmd_parameters[:default]
-    @@commands.merge!(HELP_COMMAND.dup) # make sure the help command is always last
+    argument_list = parse_arguments(@@command_options[:parameters])
+    @@command_options.merge!(:argument_list=>argument_list,:class => self.name)
+    @@commands.merge!(meth => @@command_options)
+    @@default_method = {meth => @@command_options} if @@command_options[:default]
+
+    @@commands.sort.each {|com| @@commands.merge!(com[0]=>@@commands.delete(com[0]))}
+    
+    @@commands.merge!(HELP_COMMAND.dup) # makes sure the help command is always last
+    @@command_options = nil
   end
 
   # Trap method creation after a command call 
   def method_added(meth)
-    return super(meth) if meth == :initialize
-    
     set_trace_func(nil)
-    @@cmd_parameters.merge!(:parameters=>self.instance_method(meth).parameters,:class_method=>false)
+    return super(meth) if meth == :initialize || @@command_options == nil
+    @@command_options.merge!(:parameters=>self.instance_method(meth).parameters,:class_method=>false)
     add_command(meth)
   end
   
   # Trap class methods too
   def singleton_method_added(meth)
     set_trace_func(nil)
-    @@cmd_parameters.merge!(:parameters=>method(meth).parameters, :class_method=>true)
+    return super(meth) if meth == :initialize || @@command_options == nil
+    @@command_options.merge!(:parameters=>method(meth).parameters, :class_method=>true)
     add_command(meth)
   end
 

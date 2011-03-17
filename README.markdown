@@ -12,6 +12,10 @@ The whole process can take as little as four lines of code:
 
 Don't think of Commandable as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that means one thing in one program and something else in another. You can now "use your words" to let people interact with your apps in a natural way.
 
+## Status
+
+2011-03-16 - Final testing and building the example app. You could use it now but there are a few more minor things to add.
+
 ## Installation  
 From the command line:  
 
@@ -45,7 +49,7 @@ _**command**_ _(required)_
 This is the only thing that's required. It tells Commandable to add the method that follows to the list of methods available from the command line.
 
 _**description**_ [optional]  
-As you would imagine this is a short description of what the method does. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).
+As you would imagine this is a short description of what the method does. You can have multiple lines by using a new line, `\\n`, in the description and your description will be lined up properly. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).
 
 _**:required**_ [optional]  
 You can mark a method as required and the user must specify this command and any required parameters every time they run your app. Note that while you can have a method marked as both :default and :required that would be kind of pointless since :required means they have to type out the name of the function and :default means they don't.
@@ -76,6 +80,8 @@ The XOR group name will be printed in the front to the description text so it's 
 
 ### Parameter lists
 The parameter lists for each method that are printed out in the usage/help instructions are are built using the names you give them so you should make sure to use descriptive names. Also keep in mind that all command line parameters are strings so you need to deal with that inside your methods if what you really want is a number.
+
+If none of your methods have parameters then there won't be any reference to parameters in the help/usage instructions.
 
 ### A complete class
 
@@ -125,7 +131,7 @@ You can also use it on class methods:
       end
     end
 
-If you want to do a block of class commands using class << self you need to put `extend Commandable` inside the block:
+If you want to do a block of class commands using `class << self` you need to put `extend Commandable` inside the block:
 
     require "commandable"
 
@@ -148,8 +154,28 @@ If you want to do a block of class commands using class << self you need to put 
 
 Note: Class methods are called directly on the class while instance methods have an instance created for that call. Keep that in mind if you need to share data between calls. In that case you might want to store your data in a model you create outside the execution queue.
 
+### Automatic usage/help generation ###
+
+One of the great features of Commandable is that it will automatically create usage instructions based on your methods and the descriptions you provide for them. The `help` command is also added for you automatically. If your app has no default or it has a default command that requires parameters the help/usage instructions will be printed if a user just runs your app without any input.
+
+A typical help output looks something like this:  
+
+    Commandable - The easiest way to add command line control to your app.
+      Copyrighted free software - Copyright (c) 2011 Mike Bethany.
+
+      Usage: commandable <command> [parameters] [<command> [parameters]...]
+
+      Command Parameters Description
+       readme            : displays the readme file (default)
+     examples [path]     : create an exampe app with lots of examples
+        error            : Will raise a programmer error, not a user error
+                           so you see what happens when you have bad code
+         help            : you're looking at it now
+
+
+
 ### Example classess ###
-To see a huge number of possible configurations run the following command and an application will be created with a bunch of examples:
+For a fully working example with RSpec and Cucumber tests run this command:
 
     $ commandable examples [path]
 
@@ -266,21 +292,21 @@ Now that you've added a command to a method you can send the command line argume
     # The array is automatically sorted by priority (higher numbers first, 10 > 0)
 
     # First get the array of commands
-    command_array = Commandable.execution_queue(ARGV) # no need to give it ARGV, it's there for testing
+    command_queue = Commandable.execution_queue(ARGV) # no need to give it ARGV, it's there for testing
     
-    return_values = (command_array.shift)[:proc].call
+    return_values = (command_queue.shift)[:proc].call
     # do something with the return values
    
     # check for more values however you want
-    more_return_values = (command_array.shift).call unless command_array.empty?
+    more_return_values = (command_queue.shift).call unless command_queue.empty?
 
 If you need a little more control:
     
     # First get the array of commands
-    command_array = Commandable.execution_queue(ARGV) # no need to give it ARGV
+    command_queue = Commandable.execution_queue(ARGV) # no need to give it ARGV
 
     # Loop through the array calling the commands and dealing with the results
-    command_array.each do |cmd|
+    command_queue.each do |cmd|
 
       # If you need more data about the method you can
       # get the method properties from Commandable[]
@@ -332,13 +358,13 @@ Simply configure your bin file to run Commandable#execute:
     # do stuff
 
 
+I actually prefer to create a separate file for my Commandable configuration and load it in my apps main file in the `lib` directory. Just make sure you load the Commandable configuration file first.
+
 ## In closing... ##
 
-One really cool thing about this design is you can add extend another app that uses Commandable and add your own methods without having to crack open their code.
+One really cool thing about this design is you can extend another app and add your own command line controls without having to crack open their code. The other app doesn't even have to use commandable. You can just write your own methods that call the methods of the original program.
 
-This is the first public release so it's still very newish. You know the saying, "It doesn't work for you? But it works great on my computer!"
-
-The code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out in beta.
+I should also say the code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out in beta.
 
 If you have any questions about how the code works I've tried to give as much info in these docs as possible but I am also an OCD level commenter so you should be able to find fairly good explanations of what I'm doing in the code.
 
@@ -347,24 +373,26 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 ## To Do
 
-Still working on:
+Still working on for this version:
 
-* Example app.
+* Example app. It will be in the release version but I want to release a beta so I can test the gem via RubyGems.
 
 ###Next version:
 
 * Massive refactoring.   
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
-* Method aliases cleanly added.
-* Better formatting of help instructions, the existing one is uglier than sin.
-* Use the first line of comments below `command` as the description text.
+* Try to see if I can figure out how to trap aliases without without an additional `command` use
+* Better formatting of help instructions, the existing one is fairly ugly.
+* Use comments below `command` as the description text so you don't have to repeat yourself to get RDoc to give you docs for your functions.
+* Clean up RSpecs. I'm doing too many ugly tests of internal state instead of specifying behavior.
+* Allow sorting of commands alphabetically or by priority
 
 ###Future versions:
 
+* Accepting your suggestions...
 * Make the help/usage directions format available to programmers without having to hack the code.
 * More edge case testing.
-* Look at adding ability to save instances across method calls.
-* Look at ability to inject instances into the method execution queue.
-* Allow optional parameters values to be reloaded so changing verbose_parameters makes the command list change. (**very** low priority)
+* Allow optional parameters values to be reloaded so changing things like verbose_parameters makes the command list change. (**very** low priority)
+
 
 .

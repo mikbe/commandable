@@ -1,9 +1,10 @@
 $:.unshift File.expand_path((File.dirname(__FILE__) + '/../../lib'))
 require "commandable"
 
-class NoDescription
+class TestClass
   extend Commandable
-  command
-  def method_with_no_description
-  end
+  command 'does some stuff'
+  def test_method
+    "test_method"
+  end 
 end

@@ -3,29 +3,17 @@ module Commandable
   # Programmer errors
   
   # An error made by the programmer when specifiying a command 
-  class SyntaxError < Exception
-    # Returns a more print friendly error name
-    def friendly_name
-      "Internal Syntax Error"
-    end
+  class SyntaxError < StandardError
   end
 
   # A programmer's error raised if setting are specifiying incorrectly, 
   # For example if you set more than one default method.
-  class ConfigurationError < Exception
-    # Returns a more print friendly error name
-    def friendly_name
-      "Internal Configuration Error"
-    end
+  class ConfigurationError < StandardError
   end
 
   # A programmer's error raised if the list of commands is accessed using something other than a string or :symbol
   # This is meant to catch meta-programming errors.
-  class AccessorError < Exception
-    # Returns a more print friendly error name
-    def friendly_name
-      "Internal Accessor Error"
-    end
+  class AccessorError < StandardError
     # Create a new instance of the AccessorError class
     def initialize(msg = "You may only access Commandable[] using a string or :symbol" )
       super(msg)
@@ -34,9 +22,8 @@ module Commandable
 
   # User errors
 
-
   # An error raised if a user does not provide a required command
-  class MissingRequiredCommandError < StandardError
+  class MissingRequiredCommandError < ScriptError
     # Returns a more print friendly error name
     def friendly_name
       "Missing Required Command"
@@ -48,7 +35,7 @@ module Commandable
   end
 
   # This error is raised if a user gives two or more commands from the same exclusive group
-  class ExclusiveMethodClashError < StandardError
+  class ExclusiveMethodClashError < ScriptError
     # Returns a more print friendly error name
     def friendly_name
       "Exclusive "
@@ -60,7 +47,7 @@ module Commandable
   end
 
   # A error raised if a user tries to run a command that is not in the commands array
-  class UnknownCommandError < StandardError
+  class UnknownCommandError < ScriptError
     # Returns a more print friendly error name
     def friendly_name
       "Unknown Command"

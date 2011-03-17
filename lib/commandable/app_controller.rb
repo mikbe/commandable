@@ -5,23 +5,38 @@ module Commandable
     
     class << self
       extend Commandable
-      
-      command "displays the readme file"
+ 
       # Displays the readme file
+      command "displays the readme file", :default
       def readme
         `open #{File.expand_path((File.dirname(__FILE__) + '/../../readme.markdown'))}`
       end
       
-      command "create an exampe app with lots of examples"
-      # Creates a simple example app
-      def examples(path="./cmdx")
-      
+      command "Copies a fully working app demonstrating how\n to use Commandable with RSpec and Cucumber"
+      # Creates a simple example app demonstrating a fully working app
+      def widget(path="./widget")
+        puts "This feature hasn't been added yet. I'm working on it now and it will be in the release version."
       end
       
-      command "test default" , :default
-      def dummy_default(stuff)
-        "I am the champion! Of the world! Oh, and you said, #{stuff}"
+      command "Copies the test classes to a folder so\n you can see a bunch of small examples"
+      # Copies the test classes to a folder so you can see a bunch of small examples
+      def examples(path="./example_classes")
+        FileUtils.copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)
       end
+
+      command "Will raise a programmer error, not a user error\nso you see what happens when you have bad code"
+      # Causes an error so you can see what it will look like if you have an error in your code.
+      def error
+        raise Exception, "An example of a non-user error caused by your bad code trapped in Commandable.execute()"
+      end
+ 
+      command "Application Version", :xor
+      # Version
+      def v
+        puts "Commandable: #{Commandable::VERSION}"
+      end
+      command "Application Version", :xor
+      alias :version :v
       
     end
     

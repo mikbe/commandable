@@ -4,11 +4,13 @@ describe Commandable do
 
   before(:each) do
     Commandable.reset_all
+    Commandable.color_output = true
     load 'xor_class.rb'
   end
   
   context "when exclusive methods are specified" do
 
+    # this seems like I'm testing internal state instead of specifying behavior...
     specify {Commandable.commands[:xor_method1][:xor].should == :xor}
     specify {Commandable.commands[:normal_method][:xor].should be_nil}
     specify {Commandable.commands[:xor_method3][:xor].should == :xor_group}
@@ -25,12 +27,12 @@ describe Commandable do
     
     context "when printing help" do
     
-      it "puts the xor group in the description" do
-        
-        #puts Commandable.help
-        
-        #true.should be_false
-        
+      it "puts the default xor group :xor in the description" do
+        execute_output_s(["help"]).should match(/xor/)
+      end
+    
+      it "puts the xor group :xor_group in the description" do
+        execute_output_s(["help"]).should match(/xor/)
       end
     
     end

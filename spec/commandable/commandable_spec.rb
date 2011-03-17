@@ -4,7 +4,7 @@ describe Commandable do
 
   before(:each) {Commandable.reset_all}
 
-  context "basic functionality" do
+  context "when using Commandable directly" do
 
     before(:each) { load 'test_class.rb' }
 
@@ -120,7 +120,32 @@ describe Commandable do
       Commandable[:foo][:parameters].should == [[:req, :int_arg1], [:req, :number_arg2]]
     end
     
+  end
+
+  context "when there are methods using command and methods not using command" do
+
+    context "and they are instance methods" do
     
+      before(:each) {load 'command_no_command.rb'}
+
+      specify {Commandable.commands.should include(:command_method1)}
+      specify {Commandable.commands.should include(:command_method2)}
+      specify {Commandable.commands.should_not include(:no_command_method1)}
+      specify {Commandable.commands.should_not include(:no_command_method2)}
+    
+    end
+
+    context "and they are class methods" do
+    
+      before(:each) {load 'class_command_no_command.rb'}
+
+      specify {Commandable.commands.should include(:class_command_method1)}
+      specify {Commandable.commands.should include(:class_command_method2)}
+      specify {Commandable.commands.should_not include(:class_no_command_method1)}
+      specify {Commandable.commands.should_not include(:class_no_command_method2)}
+    
+    end
+
   end
 
   context "when using class methods" do
@@ -163,13 +188,14 @@ describe Commandable do
     end
     
     it "executes the default command if no command is given" do
-      execute_output_ary(["Klaatu"]).should == ["default method called: Klaatu"]
+      execute_output_ary(["Klaatu"]).should == ["default method called with: Klaatu"]
     end
     
     it "executes a default method and a second command" do
       execute_output_ary(["Klaatu", "not_a_default_method", "28"]).sort.should == [
-        "default method called: Klaatu",
-        "not a default method: Cleveland", "28"].sort
+        "default method called with: Klaatu", 
+        "not a default method, called with: Cleveland",
+        "28"].sort
     end
     
   end
