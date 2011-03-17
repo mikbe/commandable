@@ -1,4 +1,4 @@
-$:.unshift File.expand_path((File.dirname(__FILE__) + '/../../lib'))
+@@command_options
 require "commandable"
 
 class ClassCommandNoCommand

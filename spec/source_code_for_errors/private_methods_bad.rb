@@ -1,4 +1,4 @@
-$:.unshift File.expand_path((File.dirname(__FILE__) + '/../../lib'))
+@@command_options
 require "commandable"
 
 # This is just a not so clever way of getting at the instance methods of Commandable

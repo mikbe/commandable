@@ -1,4 +1,4 @@
-$:.unshift File.expand_path((File.dirname(__FILE__) + '/../../lib'))
+@@command_options
 require "commandable"
 
 class TestClass
@@ -8,3 +8,6 @@ class TestClass
     "test_method"
   end 
 end
+
+
+puts Commandable.execution_queue([])
