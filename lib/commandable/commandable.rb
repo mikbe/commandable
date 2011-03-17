@@ -19,13 +19,13 @@ module Commandable
     
     # Describes your application, printed at the top of help/usage messages
     attr_accessor :app_info
-    
+  
     # Used when building the usage line, e.g. Usage: app_name [command] [parameters]
     attr_accessor :app_name
-    
+  
     # If optional parameters show default values, true by default
     attr_accessor :verbose_parameters
-    
+  
     # Boolean: If help/usage messages will print in color
     attr_accessor :color_output
     # What color the app_info text will be in the help message
@@ -40,7 +40,7 @@ module Commandable
     attr_accessor :color_parameter
     # What color the word "Usage:" will be in the help message
     attr_accessor :color_usage
-    
+  
     # What color the word "Error:" text will be in error messages
     attr_accessor :color_error_word
     # What color the friendly name of the error will be in error messages
@@ -145,18 +145,16 @@ module Commandable
           puts com[:proc].call
         end
       rescue Exception => exception
-      if exception.respond_to?(:friendly_name)
-        set_colors
-        puts help("  #{@c_error_word}Error:#{@c_reset} #{@c_error_name}#{exception.friendly_name}#{@c_reset}\n  #{@c_error_description}#{exception.message}#{@c_reset}\n\n")
-      else
-      #rescue Exception => exception
-      
-        puts "\n Bleep, bloop, bleep! Danger Will Robinson! Danger!"
-        puts "\n Error: #{exception.inspect}"
-        puts "\n Backtrace:"
-        puts exception.backtrace.collect{|line| " #{line}"}
-        puts
-      end
+        if exception.respond_to?(:friendly_name)
+          set_colors
+          puts help("\n  #{@c_error_word}Error:#{@c_reset} #{@c_error_name}#{exception.friendly_name}#{@c_reset}\n  #{@c_error_description}#{exception.message}#{@c_reset}\n\n")
+        else
+          puts "\n Bleep, bloop, bleep! Danger Will Robinson! Danger!"
+          puts "\n Error: #{exception.inspect}"
+          puts "\n Backtrace:"
+          puts exception.backtrace.collect{|line| " #{line}"}
+          puts
+        end
       end
     end
     
@@ -202,6 +200,13 @@ module Commandable
       method_hash.each do |meth, params|
         command = @@commands[meth]
         
+        # Test for missing parameters
+        required = command[:parameters].select{|param| param[0]==:req} if command[:parameters]
+        if required
+          required.shift(params.count)
+          raise MissingRequiredParameterError, {:method=>meth, :parameters=>required.collect!{|meth| meth[1]}.to_s[1...-1].gsub(":","")} unless required.empty?
+        end
+
         # Test for duplicate XORs
         proc_array.select{|x| x[:xor] and x[:xor]==command[:xor] }.each {|bad| raise ExclusiveMethodClashError, "#{meth}, #{bad[:method]}"}
 

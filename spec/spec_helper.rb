@@ -53,3 +53,8 @@ def execute_output_s(argv)
   output = capture_output{Commandable.execute(argv)}
   output[:stdout] + output[:stderr]
 end
+
+def execute_queue(argv)
+  queue = Commandable.execution_queue(argv)
+  queue.collect{|meth| meth[:proc].call}
+end

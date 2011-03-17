@@ -34,6 +34,20 @@ module Commandable
     end
   end
 
+
+  # An error raised if a user does not provide a required command
+  class MissingRequiredParameterError < ScriptError
+    # Returns a more print friendly error name
+    def friendly_name
+      "Missing Required Parmeter"
+    end
+    # Create a new instance of the MissingRequiredParameterError class
+    def initialize(msg)
+      super("The command \"#{msg[:method]}\" is missing the required parameter \"#{msg[:parameters]}\".")
+    end
+  end
+
+
   # This error is raised if a user gives two or more commands from the same exclusive group
   class ExclusiveMethodClashError < ScriptError
     # Returns a more print friendly error name

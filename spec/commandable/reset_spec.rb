@@ -18,7 +18,7 @@ describe Commandable do
       from(%{  My Cool App - It does stuff and things!\n  Copyright (c) 2011 Acme Inc.}).
       to(nil)
     }
-    specify {lambda{Commandable.reset_all}.should change{Commandable.commands.length}.from(5).to(1)}
+    specify {lambda{Commandable.reset_all}.should change{Commandable.commands.length}.from(6).to(1)}
     
 
 

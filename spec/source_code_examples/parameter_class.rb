@@ -24,4 +24,9 @@ class ParameterClass
     [number_arg1, string_arg2, array_arg3]
   end
 
+  command "a method with a required parameter"
+  def zaz(required_param, another_required)
+    [required_param, another_required]
+  end
+
 end

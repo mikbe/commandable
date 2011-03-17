@@ -17,13 +17,22 @@ describe Commandable do
   context "when parsing arguments" do
   
     context "and there is an error in the command line" do
-    
-      context "and the default method does not accept parameters" do
+ 
+      context "because a required switch is not given" do
+        specify{lambda{execute_queue(["zaz"]).should raise_error(MissingRequiredParameterError)}}
+        specify{lambda{execute_output_s(["zaz"]).should include(/Missing Required/)}}
+        specify{lambda{execute_queue(["zaz", "potato"]).should raise_error(MissingRequiredParameterError)}}
+        specify{lambda{execute_output_s(["zaz", "potato"]).should include(/Missing Required/)}}
+        specify{lambda{execute_queue(["zaz", "potato", "gump"]).should_not raise_error}}
+        specify{lambda{execute_output_s(["zaz", "potato", "gump"]).should_not include(/Missing Required/)}}
+      end
+
+      context "because the default method does not accept parameters" do
         
         before(:each) {load 'default_method_no_params.rb'}
         
         context "but something that isn't a method is the first thing on the command line" do
-          specify {lambda{Commandable.execution_queue(["potato"])}.should raise_error(Commandable::UnknownCommandError)}
+          specify {lambda{execute_queue(["potato"])}.should raise_error(Commandable::UnknownCommandError)}
           specify { execute_output_s(["potato"]).should match(/Unknown Command/)} 
         end
         
@@ -31,7 +40,7 @@ describe Commandable do
     
       context "and running procs from the execution queue" do
         it "raises an error if there is an invalid command given" do
-          lambda{Commandable.execution_queue(["fly", "navy"])}.should raise_error(Commandable::UnknownCommandError)
+          lambda{execute_queue(["fly", "navy"])}.should raise_error(Commandable::UnknownCommandError)
         end
       end
     
@@ -146,8 +155,13 @@ describe Commandable do
         
       end
       
+      context "when a default method name isn't specified but the required switch is properly given" do
+        before(:each){load "default_method.rb"}
+        specify{lambda{execute_queue(["phish"])}.should_not raise_error}
+        specify{lambda{execute_output_s(["phish"]).should include(/default method called with: phish/)}}
+      end
+      
     end
-
 
   end
 
