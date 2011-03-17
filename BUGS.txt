@@ -1,0 +1,2 @@
+term-ansicolor-hi conflicts with term-ansicolor.
+

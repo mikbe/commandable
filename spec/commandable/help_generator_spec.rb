@@ -113,7 +113,7 @@ describe Commandable do
   Copyright (c) 2011 Acme Inc."""
     end
 
-    let(:c) {Term::ANSIColor}
+    let(:c) {Term::ANSIColorHI}
     
     it "changes the output if color is enabled" do
       Commandable.color_output = false

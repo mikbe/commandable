@@ -8,6 +8,3 @@ class TestClass
     "test_method"
   end 
 end
-
-
-puts Commandable.execution_queue([])

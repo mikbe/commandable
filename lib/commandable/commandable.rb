@@ -1,4 +1,4 @@
-require 'term/ansicolor'
+require 'term/ansicolorhi'
 require 'set'
 
 # This library allows you to incredibly easily make 
@@ -218,8 +218,8 @@ module Commandable
       # Colors - off by default
       @color_output      ||= false
       # Build the default colors
-      Term::ANSIColor.coloring = true
-      c = Term::ANSIColor
+      Term::ANSIColorHI.coloring = true
+      c = Term::ANSIColorHI
       @color_app_info           = c.intense_white  + c.bold
       @color_app_name           = c.intense_green  + c.bold
       @color_command            = c.intense_yellow

@@ -18,6 +18,11 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 2011-03-17 - Final testing and building the example app. You could use it now, it's in feature freeze except for adding the example app (Widget).
 
+## Requirements ##
+
+* Ruby 1.9.2
+* *Nix OS (Probably works on Windows but not tested yet)
+
 ## Installation  
 From the command line:  
 
@@ -226,7 +231,7 @@ Then you can do something like this:
 
     require 'term/ansicolor'
     
-    c = Term::ANSIColor
+    c = Term::ANSIColorHI
     
     Commandable.color_app_info           = c.intense_white  + c.bold
     Commandable.color_app_name           = c.intense_green  + c.bold
