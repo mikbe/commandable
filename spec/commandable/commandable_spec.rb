@@ -188,14 +188,13 @@ describe Commandable do
     end
     
     it "executes the default command if no command is given" do
-      execute_output_ary(["Klaatu"]).should == ["default method called with: Klaatu"]
+      execute_output_ary(["Klaatu"]).should include("default method called with: Klaatu")
     end
     
     it "executes a default method and a second command" do
-      execute_output_ary(["Klaatu", "not_a_default_method", "28"]).sort.should == [
+      execute_output_ary(["Klaatu", "not_a_default_method", "28"]).should include(
         "default method called with: Klaatu", 
-        "not a default method, called with: Cleveland",
-        "28"].sort
+        "not a default method, called with: Cleveland, 28")
     end
     
   end

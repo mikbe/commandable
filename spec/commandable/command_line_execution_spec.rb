@@ -18,16 +18,23 @@ describe Commandable do
   
     context "and there is an error in the command line" do
  
-      context "because a required switch is not given" do
-        specify{lambda{execute_queue(["zaz"]).should raise_error(MissingRequiredParameterError)}}
-        specify{lambda{execute_output_s(["zaz"]).should include(/Missing Required/)}}
-        specify{lambda{execute_queue(["zaz", "potato"]).should raise_error(MissingRequiredParameterError)}}
-        specify{lambda{execute_output_s(["zaz", "potato"]).should include(/Missing Required/)}}
-        specify{lambda{execute_queue(["zaz", "potato", "gump"]).should_not raise_error}}
-        specify{lambda{execute_output_s(["zaz", "potato", "gump"]).should_not include(/Missing Required/)}}
+      context "because a required parameter is not given" do
+        
+        context "with a class that doesn't have a default method" do
+          specify{lambda{execute_queue(["zaz"]).should raise_error(MissingRequiredParameterError)}}
+          specify{lambda{execute_output_s(["zaz"]).should include(/Missing Required/)}}
+          specify{lambda{execute_queue(["zaz", "potato"]).should raise_error(MissingRequiredParameterError)}}
+          specify{lambda{execute_output_s(["zaz", "potato"]).should include(/Missing Required/)}}
+          specify{lambda{execute_queue(["zaz", "potato", "gump"]).should_not raise_error}}
+          specify{lambda{execute_output_s(["zaz", "potato", "gump"]).should_not include(/Missing Required/)}}
+        end
+      
+        # When a default method has a required parameter and nothing is given on the command
+        # line Commandable will run help so you won't get a MissingRequiredParameterError
+        
       end
 
-      context "because the default method does not accept parameters" do
+      context "and the default method does not accept parameters" do
         
         before(:each) {load 'default_method_no_params.rb'}
         
@@ -159,6 +166,8 @@ describe Commandable do
         before(:each){load "default_method.rb"}
         specify{lambda{execute_queue(["phish"])}.should_not raise_error}
         specify{lambda{execute_output_s(["phish"]).should include(/default method called with: phish/)}}
+        specify{execute_queue(["not_a_default_method", "potato"]).should include("not a default method, called with: Cleveland, potato") }
+        specify{execute_output_s(["not_a_default_method", "phish"]).should include("not a default method, called with: Cleveland, phish")}
       end
       
     end

@@ -216,6 +216,7 @@ module Commandable
         proc_array << {:method=>meth, :xor=>command[:xor], :parameters=>params, :priority=>command[:priority], :proc=>lambda{klass.send(meth, *params)}}
       end
       proc_array.sort{|a,b| a[:priority] <=> b[:priority]}.reverse
+    
     end
    
     # Set colors to their default values
