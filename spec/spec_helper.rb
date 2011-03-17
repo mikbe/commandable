@@ -3,6 +3,7 @@ $:.unshift File.expand_path((File.dirname(__FILE__) + '/source_code_examples'))
 $:.unshift File.expand_path((File.dirname(__FILE__) + '/source_code_for_errors'))
 $:.unshift File.expand_path(File.dirname(__FILE__))
 
+require 'pp'
 require 'term/ansicolor'
 require 'rspec'
 require 'commandable'

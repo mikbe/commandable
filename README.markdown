@@ -16,7 +16,11 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Status
 
-2011-03-17 - Final testing and building the example app. You could use it now, it's in feature freeze except for adding the example app (Widget).
+2011-03-18 - Final testing and building the example app. I'd wait to use it till I finish the example app. I'm finding new use cases as I do this and correcting some omissions of logic.
+
+## Principle of Least Surprise
+
+I've tried to honestly follow the theory of the principle of least surprise so it should just work like you would expect it to.
 
 ## Requirements ##
 
