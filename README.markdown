@@ -1,5 +1,5 @@
 # Commandable
-The easiest way to add command line control to your app. If you don't find **Commandable** incredibly easy to use I will give you one billions dollars!\* (\*not a legally binding offer)
+The easiest way to add command line control to your Ruby app. If you don't find **Commandable** incredibly easy to use I will give you one billions dollars!\* (\*not a legally binding offer)
 
 Stop wasting time writing wet command line interpreters or even writing code for the existing ones. Then writing help functions that you have to constantly change as your code changes. Now you can add a single line above an existing method and that method will be available from the command line. Best of all the help/usage instructions are automatically generated using the method itself so if you change your methods the help instructions change without any more effort on your part!
 
@@ -10,13 +10,13 @@ The whole process can take as little as four lines of code:
 * Then an `extend Commandable` inside your class.
 * And finally a call to `Commandable.execute(ARGV)` in your bin file. 
 
-Don't think of **Commandable** as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that mean one thing in one program and something completely different in another. (Can you believe some apps actually use -v for something other than "version" and -h for something other than "help?" Madness I say! Madness!)
+Don't think of **Commandable** as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that mean one thing in one program and something completely different in another. (Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!)
 
 You can now "use your words" to let people interact with your apps in a natural way.
 
 ## Status
 
-2011-03-17 - Final testing and building the example app. You could use it now but there are a few more minor things to add.
+2011-03-17 - Final testing and building the example app. You could use it now, it's in feature freeze except for adding the example app (Widget).
 
 ## Installation  
 From the command line:  
@@ -162,7 +162,7 @@ One of the great features of **Commandable** is that it will automatically creat
 
 A typical help output looks something like this:  
 
-    **Commandable** - The easiest way to add command line control to your app.
+    Commandable - The easiest way to add command line control to your app.
     Copyrighted free software - Copyright (c) 2011 Mike Bethany.
     Version: 0.2.0.beta01
 
@@ -389,7 +389,8 @@ Still working on for this version:
 
 ###Next version:
 
-* Needs a massive refactoring.   
+* Needs a massive refactoring.
+* Generator to add Commandable support to your app.
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
 * Try to figure out how to trap `alias` without an additional `command` use
 * Better formatting of help instructions, the existing one is fairly ugly.
