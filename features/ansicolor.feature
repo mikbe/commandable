@@ -1,10 +1,11 @@
 Feature: Ansicolor
   In order to not have horrible looking colors
   As a programmer
-  I want to update the abandoned AnsiColor gem
+  I want to make sure I'm using ANSIColorHI
+  And it doesn't conflict with the original ANSIColor
   
   
   Scenario: Run a feature
-  When I run a feature
-  Then it doesn't give an ANSI error the bed
+  When I run cucumber
+  Then it doesn't give an error
   
