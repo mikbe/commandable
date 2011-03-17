@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email                   = ["mikbe.tk@gmail.com"]
   s.homepage                = "http://mikbe.tk"
   s.summary                 = %q{The easiest way to add command line control to your app.}
-  s.description             = %q{Adding command line control to your app is as easy as putting 'command "this command does xyz"' above a method. Parameter lists and a help command are automatically built for you.}
+  s.description             = %q{The easiest way to add command line control to your app.\nAdding command line control to your app is as easy as putting 'command "this command does xyz"' above a method.\nParameter lists and a help command are automatically built for you.}
 
   s.add_dependency("term-ansicolor-hi", "~>1.0.7")
   
