@@ -12,13 +12,13 @@ module Commandable
         `open #{File.expand_path((File.dirname(__FILE__) + '/../../readme.markdown'))}`
       end
       
-      command "Copies a fully working app demonstrating how\n to use Commandable with RSpec and Cucumber"
+      command "Copies a fully working app demonstrating how\nto use Commandable with RSpec and Cucumber"
       # Creates a simple example app demonstrating a fully working app
       def widget(path="./widget")
         puts "This feature hasn't been added yet. I'm working on it now and it will be in the release version."
       end
       
-      command "Copies the test classes to a folder so\n you can see a bunch of small examples"
+      command "Copies the test classes to a folder so\nyou can see a bunch of small examples"
       # Copies the test classes to a folder so you can see a bunch of small examples
       def examples(path="./example_classes")
         FileUtils.copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)

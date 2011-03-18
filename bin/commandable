@@ -4,7 +4,7 @@ require 'commandable'
 Commandable.color_output = true
 Commandable.verbose_parameters = false
 Commandable.app_name = "commandable"
-Commandable.app_info =
+Commandable.app_info =  
 """
   \e[92mCommandable\e[0m - The easiest way to add command line control to your app.
   Copyrighted free software - Copyright (c) 2011 Mike Bethany.
