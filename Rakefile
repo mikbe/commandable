@@ -1,9 +1,10 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-require "rake"
-require "rake/rdoctask"
-require "rspec/core/rake_task"
+require 'rake'
+require 'rake/rdoctask'
+require 'rspec/core/rake_task'
+require 'cucumber/rake/task'
 
 desc "Run all examples"
 RSpec::Core::RakeTask.new(:spec) do |t|
@@ -11,8 +12,12 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = true
 end
 
-task :default => [:spec, :build]
-task :test =>[:spec]
+Cucumber::Rake::Task.new(:cucumber) do |t|
+  t.cucumber_opts = %w{--tags ~@jruby} unless defined?(JRUBY_VERSION)
+end
+
+task :default => [:test, :build]
+task :test =>[:cucumber, :spec]
 
 task :clobber do
   rm_rf 'pkg'
