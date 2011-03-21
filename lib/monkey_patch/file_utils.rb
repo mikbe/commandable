@@ -1,7 +1,7 @@
 require 'fileutils'
 
 module FileUtils
-  # Monkeypatch FileUtils really annoying directory copying
+  # Monkeypatch FileUtils really annoying lack of proper directory copying
   def copy_dir(source, dest)
     files = Dir.glob("#{source}/**")
     mkdir_p dest
