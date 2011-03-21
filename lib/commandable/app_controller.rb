@@ -15,7 +15,13 @@ module Commandable
       command "Copies a fully working app demonstrating how\nto use Commandable with RSpec and Cucumber"
       # Creates a simple example app demonstrating a fully working app
       def widget(path="./widget")
+        
+        # Test for Git
+        return "Git must be installed to download Widget (You're a developer and you don't have Git installed?)" unless "#{`git --version`}".match(/^git version/i)
+
         puts "This feature hasn't been added yet. I'm working on it now and it will be in the release version."
+      
+      
       end
       
       command "Copies the test classes to a folder so\nyou can see a bunch of small examples"
