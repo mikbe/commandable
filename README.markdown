@@ -16,7 +16,8 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Status
 
-2011-03-18 - Final testing and building the example app. I'd wait to use it till I finish the example app. I'm finding new use cases as I do this and correcting some omissions of logic.
+2011-03-21 - Release Cadidate: 0.2.0.rc1
+
 
 ## Principle of Least Surprise
 
@@ -347,7 +348,7 @@ If you need a little more control:
       
     end
     
-### The easiest way
+### The even easier way
 
 **Commandable.execute(ARGV)**
 
@@ -363,7 +364,6 @@ Simply configure your bin file to run `Commandable#execute`:
 
     #!/usr/bin/env ruby
     $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
-    require 'yourappname'
     require 'commandable'
     Commandable.verbose_parameters = false
     Commandable.color_output = true
@@ -373,6 +373,11 @@ Simply configure your bin file to run `Commandable#execute`:
       My App - It does stuff and things!
       Copyright (c) 2011 Acme Inc.
     """
+
+    # Make sure you require your app after Commandable, or use
+    # a configuration file to load the settings then your app
+    # See the Widget app for an example of this.
+    require 'yourappname'
     return_values = Commandable.execute(ARGV)
     # do stuff
 
@@ -383,18 +388,16 @@ I actually prefer to create a separate file for my **Commandable** configuration
 
 One really cool thing about this design is you can extend another app and add your own command line controls without having to crack open their code. The other app doesn't even have to use **Commandable**. You can just write your own methods that call the methods of the original program.
 
-I should also say the code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out in beta.
+I should also say the code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out as is.
 
 If you have any questions about how the code works I've tried to give as much info in these docs as possible but I am also an OCD level commenter so you should be able to find fairly good explanations of what I'm doing in the code.
 
-Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I hate people that don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
+Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I when people that don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
 
 
 ## To Do
 
-Still working on for this version:
-
-* Finish **Widget** example app. It will be in the release version but I want to release a beta so I can test the gem via RubyGems.
+Done with 0.2.0. Release to final beta.
 
 ###Next version:
 
