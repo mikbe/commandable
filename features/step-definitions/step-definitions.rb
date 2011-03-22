@@ -1,7 +1,5 @@
-Around('@download_widget') do |scenario, block|
-  Timeout.timeout(30) do
-    block.call
-  end
+Before do
+  @aruba_timeout_seconds = 30
 end
 
 When /^I run cucumber$/ do
