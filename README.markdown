@@ -172,23 +172,23 @@ One of the great features of **Commandable** is that it will automatically creat
 
 A typical help output looks something like this:  
 
-  Commandable - The easiest way to add command line control to your app.
-  Copyrighted free software - Copyright (c) 2011 Mike Bethany.
-  Version: 0.2.0
+    Commandable - The easiest way to add command line control to your app.
+    Copyrighted free software - Copyright (c) 2011 Mike Bethany.
+    Version: 0.2.0
 
-  Usage: commandable <command> [parameters] [<command> [parameters]...]
+    Usage: commandable <command> [parameters] [<command> [parameters]...]
 
-  Command Parameters Description
-    error            : Will raise a programmer error, not a user error
-                       so you see what happens when you have bad code
- examples [path]     : Copies the test classes to a folder so
-                       you can see a bunch of small examples
-   readme            : displays the readme file (default)
-        v            : <xor> Application Version
-  version            : <xor> Application Version
-   widget [path]     : Copies a fully working app demonstrating how
-                       to use Commandable with RSpec and Cucumber
-     help            : you're looking at it now
+    Command Parameters Description
+      error            : Will raise a programmer error, not a user error
+                         so you see what happens when you have bad code
+    examples [path]     : Copies the test classes to a folder so
+                         you can see a bunch of small examples
+     readme            : displays the readme file (default)
+          v            : <xor> Application Version
+    version            : <xor> Application Version
+     widget [path]     : Copies a fully working app demonstrating how
+                         to use Commandable with RSpec and Cucumber
+       help            : you're looking at it now
 
 
 
