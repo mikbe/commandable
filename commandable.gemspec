@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.add_dependency("term-ansicolor-hi", "~>1.0.7")
   
   s.add_development_dependency("rspec", "~>2.5")
-  s.add_development_dependency("cucumber")
-  s.add_development_dependency("aruba")
+  s.add_development_dependency("cucumber", "~>0.10")
+  s.add_development_dependency("aruba", "~>0.3")
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec,autotest}/*`.split("\n")

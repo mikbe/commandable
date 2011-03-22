@@ -49,6 +49,7 @@ describe Commandable do
     end
 
     it "adds the application name to the help output if it's given" do
+      Commandable.color_output = false
       load 'parameter_class.rb'
       Commandable.app_name = "mycoolapp"
       Commandable.help.to_s.should match(/Usage: mycoolapp <command>/)

@@ -20,7 +20,7 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Principle of Least Surprise
 
-I've tried to honestly follow the theory of the principle of least surprise so it should just work like you would expect it to.
+I've tried to follow the principle of least surprise so Commandable should just work like you would expect it to. As long as you expect it to work the same way as I do.
 
 ## Requirements ##
 
@@ -171,23 +171,23 @@ One of the great features of **Commandable** is that it will automatically creat
 
 A typical help output looks something like this:  
 
-    Commandable - The easiest way to add command line control to your app.
-    Copyrighted free software - Copyright (c) 2011 Mike Bethany.
-    Version: 0.2.0.beta01
+  Commandable - The easiest way to add command line control to your app.
+  Copyrighted free software - Copyright (c) 2011 Mike Bethany.
+  Version: 0.2.0
 
-    Usage: commandable <command> [parameters] [<command> [parameters]...]
+  Usage: commandable <command> [parameters] [<command> [parameters]...]
 
-    Command Parameters Description
-      error            : Will raise a programmer error, not a user error
-                          so you see what happens when you have bad code
-   examples [path]     : Copies the test classes to a folder so
-                          you can see a bunch of small examples
-     readme            : displays the readme file (default)
-          v            : <xor> Application Version
-    version            : <xor> Application Version
-     widget [path]     : Copies a fully working app demonstrating how
-                          to use **Commandable** with RSpec and Cucumber
-       help            : you're looking at it now
+  Command Parameters Description
+    error            : Will raise a programmer error, not a user error
+                       so you see what happens when you have bad code
+ examples [path]     : Copies the test classes to a folder so
+                       you can see a bunch of small examples
+   readme            : displays the readme file (default)
+        v            : <xor> Application Version
+  version            : <xor> Application Version
+   widget [path]     : Copies a fully working app demonstrating how
+                       to use Commandable with RSpec and Cucumber
+     help            : you're looking at it now
 
 
 
@@ -198,7 +198,7 @@ For a fully working example with RSpec and Cucumber tests run this command:
 
 If you would like to see a bunch of simple classes that demonstrate its uses run:
 
-    $ commandable example [path]
+    $ commandable examples [path]
 
 ### Commandable Options
 
@@ -251,8 +251,8 @@ Then you can do something like this:
 ###Color options 
 
 **Commandable.color\_output**  
-_default = false_  
-Set to true to enable colorized help/usage instructions.
+_default = true_  
+Set to false to disable colorized help/usage instructions. You might find it really, really annoying...
 
 **Commandable.color\_app\_info**  
 _default = intense\_white_ + bold  

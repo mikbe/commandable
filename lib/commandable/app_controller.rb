@@ -2,7 +2,8 @@ module Commandable
   
   # A helper to display the read me file and generate an example app
   class AppController
-    
+    WIDGET_GITHUB = "://github.com/mikbe/widget"
+
     class << self
       extend Commandable
  
@@ -15,13 +16,28 @@ module Commandable
       command "Copies a fully working app demonstrating how\nto use Commandable with RSpec and Cucumber"
       # Creates a simple example app demonstrating a fully working app
       def widget(path="./widget")
-        
         # Test for Git
-        return "Git must be installed to download Widget (You're a developer and you don't have Git installed?)" unless "#{`git --version`}".match(/^git version/i)
+        unless git_installed?
+          puts "Git must be installed to download Widget (You're a developer and you don't have Git installed?)"
+          return
+        end
+        # Git already has all of it's own error trapping 
+        # it would be horrible coupling and duplication
+        # of effort to do anything on my end for failures.
+        puts "\nUnable to download widget. You can find the souce code here:\nhttps#{WIDGET_GITHUB}" unless download_widget(path) == 0
+      end
 
-        puts "This feature hasn't been added yet. I'm working on it now and it will be in the release version."
-      
-      
+      # Downloads Widget from the git repository
+      # This is external to the widget command so it can be stubbed for testing
+      def download_widget(path)
+        `git clone git#{WIDGET_GITHUB}.git #{path}`
+        $?.exitstatus
+      end
+
+      # Checks to see if Git is installed
+      # This is external to the widget command so it can be stubbed for testing
+      def git_installed?
+        !`git --version`.chomp.match(/^git version/i).nil?
       end
       
       command "Copies the test classes to a folder so\nyou can see a bunch of small examples"

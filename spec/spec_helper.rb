@@ -5,8 +5,10 @@ $:.unshift File.expand_path(File.dirname(__FILE__))
 
 require 'pp'
 require 'term/ansicolor'
+require 'rspec/mocks'
 require 'rspec'
 require 'commandable'
+#require 'commandable/app_controller'
 
 # A note on the specs:
 # Since Commandable uses singletons the tests sometimes get confused about their state.

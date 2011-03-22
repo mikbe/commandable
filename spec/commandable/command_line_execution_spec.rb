@@ -6,10 +6,10 @@ describe Commandable do
     Commandable.reset_all
     Commandable.app_name = "mycoolapp"
     Commandable.app_info = 
-    """
-      My Cool App - It does stuff and things!
-      Copyright (c) 2011 Acme Inc.
-    """
+"""
+  My Cool App - It does stuff and things!
+  Copyright (c) 2011 Acme Inc.
+"""
 
     load 'parameter_class.rb'
   }

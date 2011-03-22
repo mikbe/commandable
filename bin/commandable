@@ -8,7 +8,7 @@ Commandable.app_info =
 """
   \e[92mCommandable\e[0m - The easiest way to add command line control to your app.
   Copyrighted free software - Copyright (c) 2011 Mike Bethany.
-  Version: #{Commandable::VERSION}
+  Version: #{Commandable::VERSION::STRING}
 """
 
 # App controller has to be loaded after commandable settings

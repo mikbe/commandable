@@ -222,9 +222,9 @@ module Commandable
     # Set colors to their default values
     def reset_colors
       # Colors - off by default
-      @color_output      ||= false
+      @color_output      ||= true
       # Build the default colors
-      Term::ANSIColorHI.coloring = true
+      Term::ANSIColorHI.coloring = color_output
       c = Term::ANSIColorHI
       @color_app_info           = c.intense_white  + c.bold
       @color_app_name           = c.intense_green  + c.bold
