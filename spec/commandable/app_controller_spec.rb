@@ -30,11 +30,21 @@ describe Commandable do
     
     end
     context "when git is installed" do
-
-      it "should download Widget from github" do
-        Commandable::AppController.stub(:download_widget){0}
-        execute_queue(["widget"]).should == [0]
+      
+      context "and it's able to install the files" do
+        it "should download Widget from github" do
+          Commandable::AppController.stub(:download_widget){0}
+          execute_output_s(["widget"]).should_not include("Unable to download")
+        end
       end
+      
+      context "but it's not able to install the files" do
+        it "should download Widget from github" do
+          Commandable::AppController.stub(:download_widget){1}
+          execute_output_s(["widget"]).should include("Unable to download")
+        end
+      end
+
     
     end
 

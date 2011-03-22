@@ -2,7 +2,7 @@ module Commandable
   
   # A helper to display the read me file and generate an example app
   class AppController
-    WIDGET_GITHUB = "://github.com/mikbe/widget"
+    WIDGET_GITHUB ||= "://github.com/mikbe/widget"
 
     class << self
       extend Commandable
@@ -24,7 +24,7 @@ module Commandable
         # Git already has all of it's own error trapping 
         # it would be horrible coupling and duplication
         # of effort to do anything on my end for failures.
-        puts "\nUnable to download widget. You can find the souce code here:\nhttps#{WIDGET_GITHUB}" unless download_widget(path) == 0
+        puts "\nUnable to download Widget. You can find the souce code here:\nhttps#{WIDGET_GITHUB}" unless download_widget(path) == 0
       end
 
       # Downloads Widget from the git repository
@@ -42,7 +42,7 @@ module Commandable
       
       command "Copies the test classes to a folder so\nyou can see a bunch of small examples"
       # Copies the test classes to a folder so you can see a bunch of small examples
-      def examples(path="./example_classes")
+      def examples(path="./examples")
         FileUtils.copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)
       end
 
