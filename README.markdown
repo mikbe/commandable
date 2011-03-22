@@ -203,7 +203,7 @@ If you would like to see a bunch of simple classes that demonstrate its uses run
 
 ### Commandable Options
 
-There are the basic options you will want to be aware of. Specifically you really want to set `Commandable#app_name` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.
+These are the basic options you will want to be aware of. Specifically you really want to set `Commandable#app_name` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.
 
 **Commandable.app\_name**  
 _default = ""_  
@@ -216,7 +216,7 @@ This is informational text that will print above the help/usage instructions.
 **Commandable.verbose\_parameters**  
 _default = true_  
 If set to false help instructions will not print out default values.  
-**Important!** This should only be set once, before any files load. Changing the value after files are loaded will make no difference since parameters are only parsed when the source file loads.
+**Important!** This should only be set once, after you `require 'commandable'` but before any of your code files load. Changing the value after files are loaded will make no difference since parameters are only parsed when the source file loads.
     
     Commandable.verbose_parameters = true
     # Will print:
@@ -228,7 +228,7 @@ If set to false help instructions will not print out default values.
 
 ### Colorized Output Options
 
-The help information can be colored using the standard ANSI escape commands found in the `term-ansicolor-hi` gem. The `term-ansicolor-hi` gem it installed as a dependency but just in case you can install it yourself by running:
+The help information can be colored using the standard ANSI escape commands found in the `term-ansicolor-hi` gem. The `term-ansicolor-hi` gem it installed as a dependency but just in case you have problems you can install it yourself by running:
 
     $ [sudo] gem install term-ansicolor-hi
 
@@ -253,7 +253,7 @@ Then you can do something like this:
 
 **Commandable.color\_output**  
 _default = true_  
-Set to false to disable colorized help/usage instructions. You might find it really, really annoying...
+Set to false to disable colorized help/usage instructions. You might find the colors really, really annoying...
 
 **Commandable.color\_app\_info**  
 _default = intense\_white_ + bold  
@@ -292,6 +292,9 @@ _default = intense\_black_ + bold
 The color the error description will be in error messages
 
 
+The best way to see what all this means it just type `commandable help` and you'll see the help instructions in color.
+
+
 ### Executing the Command Line
 
 There are two ways of using **Commandable** to run your methods. You can use its built in execute method to automatically run whatever is entered on the command line or you can have **Commandable** build an array of procs that you can execute yourself. This allows you to have finer grain control over the execution of the commands as you can deal with the return values as you run each command.
@@ -300,26 +303,15 @@ There are two ways of using **Commandable** to run your methods. You can use its
 
 **Commandable#execution_queue(ARGV)**
 
-Now that you've added a command to a method you can send the command line arguments (ARGV) to `Commandable#execution_queue` and it will generate an array of procs you should run sorted in the order of priority you specified when creating the commands.
+After you've added a command method and a description above a method you can then get an array of command you should execute by sending the command line arguments (ARGV) to `Commandable#execution_queue`. That method will generate an array of procs to run based on the user's input.  They're sorted by the order of priority you specified when creating the commands or if they all have the same priority they sort by how they were entered.
 
     # execution_queue returns an array of hashes which 
     # in turn  contains the method name keyed to :method
-    # and a proc key to, you guessed it, :proc
+    # and a proc keyed to, you guessed it, :proc
     # It looks like this:
-    # [{:method => :method_name, :xor=>(:xor group or nil), :parameters=>[...], :priority, :proc => #<proc:>}, ...]
+    # [{:method => :method_name, :xor=>(:xor group or nil), :parameters=>[...], :priority=>0, :proc => #<proc:>}, ...]
     #
     # The array is automatically sorted by priority (higher numbers first, 10 > 0)
-
-    # First get the array of commands
-    command_queue = Commandable.execution_queue(ARGV) # no need to give it ARGV, it's there for testing
-    
-    return_values = (command_queue.shift)[:proc].call
-    # do something with the return values
-   
-    # check for more values however you want
-    more_return_values = command_queue.shift[:proc].call unless command_queue.empty?
-
-If you need a little more control:
     
     # First get the array of commands
     command_queue = Commandable.execution_queue(ARGV) # no need to give it ARGV
@@ -352,13 +344,11 @@ If you need a little more control:
 
 **Commandable.execute(ARGV)**
 
-The easiest way to use **Commandable** is to just let it do all the work. This works great if all you need to do is make your methods available from the command line. You can also design a controller class with **Commandable** in mind and run all you command from there.
+The easiest way to use **Commandable** is to just let it do all the work. This works great if all you need to do is make your methods available from the command line. You can also design a controller class with **Commandable** in mind and run all you commands from there.
 
-When you call the `Commandable#execute` method it will return an array of hashes for each method called. Each hash in the array contains the method name and its return values.  
+When you call the `Commandable#execute` method it will print out the return values for each method called automatically. This method is really meant to be the super easy way to do things. No muss, no fuss. Fire and forget. Shooting fish in a barrel... etc.
 
-    [:method_name=>[return,values,array], :method_name2=>[return,values,array],...] 
-
-Simply configure your bin file to run `Commandable#execute`:
+You just need to configure your bin file with the app settings and then run `Commandable#execute`:
 
 **[your Ruby app directory]/bin/your\_app\_name**
 
@@ -378,36 +368,37 @@ Simply configure your bin file to run `Commandable#execute`:
     # a configuration file to load the settings then your app
     # See the Widget app for an example of this.
     require 'yourappname'
-    return_values = Commandable.execute(ARGV)
-    # do stuff
+    Commandable.execute(ARGV)
+ 
 
+I actually prefer to create a separate file for my **Commandable** configuration and load it in my main app  file in the `lib` directory. Again, take a look at `Widget` to see what I mean. 
 
-I actually prefer to create a separate file for my **Commandable** configuration and load it in my apps main file in the `lib` directory. Just make sure you load the **Commandable** configuration file first. For a complete example of this run `commandable widget [path]` and it will copy the example app to the directory you specify.
+You can get a copy of widget by running `commandable widget [path]` and it will copy the example app to the directory you specify.
 
 ## In closing... ##
 
-One really cool thing about this design is you can extend another app and add your own command line controls without having to crack open their code. The other app doesn't even have to use **Commandable**. You can just write your own methods that call the methods of the original program.
+One really cool thing about this design is you can dynamically extend another app and add your own command line controls without having to crack open their code. The other app doesn't even have to use **Commandable**. You can just write your own methods that call the methods of the original program.
 
 I should also say the code is really, really ugly right now. Thats the very next thing I will be working on for this project. This is the "rough draft" version that works perfectly well but is very ugly code-wise. I needed to use it right now so am putting it out as is.
 
 If you have any questions about how the code works I've tried to give as much info in these docs as possible but I am also an OCD level commenter so you should be able to find fairly good explanations of what I'm doing in the code.
 
-Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I when people that don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
+Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I hate when people don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
 
 
 ## To Do
 
-Done with 0.2.0. Release to final beta.
+All done... for now.
 
 ###Next version:
 
 * Needs a massive refactoring.
-* Generator to add Commandable support to your app.
+* Add a generator to automatically add Commandable support to your app.
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
-* Try to figure out how to trap `alias` without an additional `command` use
-* Better formatting of help instructions, the existing one is fairly ugly.
+* Try to figure out how to trap `alias` so I don't you don't have to use  an additional `command`.
+* Better formatting of help/usage instructions, the existing one is fairly ugly.
 * Use comments below `command` as the description text so you don't have to repeat yourself to get RDoc to give you docs for your functions.
-* Clean up RSpecs. I'm doing too many ugly tests of internal state instead of specifying behavior.
+* Clean up RSpecs. I'm doing too many ugly tests instead of specifying behavior.
 * Allow sorting of commands alphabetically or by priority
 
 ###Future versions:
