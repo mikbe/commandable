@@ -4,7 +4,7 @@ describe Commandable do
 
   before(:each) {
     Commandable.reset_all
-    Commandable.app_name = "mycoolapp"
+    Commandable.app_exe = "mycoolapp"
     Commandable.app_info = 
 """
   My Cool App - It does stuff and things!

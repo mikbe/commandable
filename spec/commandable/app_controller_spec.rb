@@ -6,7 +6,7 @@ describe Commandable do
     Commandable.reset_all
     Commandable.color_output = true
     Commandable.verbose_parameters = false
-    Commandable.app_name = "commandable"
+    Commandable.app_exe = "commandable"
     Commandable.app_info =  
     """
       \e[92mCommandable\e[0m - The easiest way to add command line control to your app.

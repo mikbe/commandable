@@ -20,8 +20,8 @@ module Commandable
     # Describes your application, printed at the top of help/usage messages
     attr_accessor :app_info
   
-    # Used when building the usage line, e.g. Usage: app_name [command] [parameters]
-    attr_accessor :app_name
+    # Used when building the usage line, e.g. Usage: app_exe [command] [parameters]
+    attr_accessor :app_exe
   
     # If optional parameters show default values, true by default
     attr_accessor :verbose_parameters
@@ -30,8 +30,8 @@ module Commandable
     attr_accessor :color_output
     # What color the app_info text will be in the help message
     attr_accessor :color_app_info
-    # What color the app_name will be in the usage line in the help message
-    attr_accessor :color_app_name
+    # What color the app_exe will be in the usage line in the help message
+    attr_accessor :color_app_exe
     # What color the word "command" and the commands themselves will be in the help message
     attr_accessor :color_command
     # What color the description column header and text will be in the help message
@@ -65,7 +65,7 @@ module Commandable
       clear_commands
       reset_colors
       @app_info = nil
-      @app_name = nil
+      @app_exe = nil
       @verbose_parameters = true
       @@default_method = nil
     end
@@ -100,10 +100,10 @@ module Commandable
 
       usage_text = "  #{@c_usage}Usage:#{@c_reset} "
 
-      if Commandable.app_name      
+      if Commandable.app_exe      
         cmd_text = "<#{@c_command + @c_bold}command#{@c_reset}>"
         parm_text = " [#{@c_parameter + @c_bold}parameters#{@c_reset}]" if max_parameter > 0
-        usage_text += "#{@c_app_name + app_name + @c_reset} #{cmd_text}#{parm_text} [#{cmd_text}#{parm_text}...]"
+        usage_text += "#{@c_app_exe + app_exe + @c_reset} #{cmd_text}#{parm_text} [#{cmd_text}#{parm_text}...]"
       end
 
       array =  [usage_text, ""]
@@ -227,7 +227,7 @@ module Commandable
       Term::ANSIColorHI.coloring = color_output
       c = Term::ANSIColorHI
       @color_app_info           = c.intense_white  + c.bold
-      @color_app_name           = c.intense_green  + c.bold
+      @color_app_exe           = c.intense_green  + c.bold
       @color_command            = c.intense_yellow
       @color_description        = c.intense_white
       @color_parameter          = c.intense_cyan
@@ -253,7 +253,7 @@ module Commandable
     def set_colors
       if color_output
         @c_app_info           = @color_app_info
-        @c_app_name           = @color_app_name
+        @c_app_exe           = @color_app_exe
         @c_command            = @color_command
         @c_description        = @color_description
         @c_parameter          = @color_parameter
@@ -266,7 +266,7 @@ module Commandable
         @c_bold               = @color_bold
         @c_reset              = @color_reset
       else
-        @c_app_info, @c_app_name, @c_command, @c_description,
+        @c_app_info, @c_app_exe, @c_command, @c_description,
         @c_parameter, @c_usage, @c_bold, @c_reset, @c_error_word,
         @c_error_name, @c_error_description = [""]*12
       end

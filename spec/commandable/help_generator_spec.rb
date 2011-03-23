@@ -51,13 +51,13 @@ describe Commandable do
     it "adds the application name to the help output if it's given" do
       Commandable.color_output = false
       load 'parameter_class.rb'
-      Commandable.app_name = "mycoolapp"
+      Commandable.app_exe = "mycoolapp"
       Commandable.help.to_s.should match(/Usage: mycoolapp <command>/)
     end
 
     it "adds appliction information if given" do
       load 'parameter_class.rb'
-      Commandable.app_name = "mycoolapp"
+      Commandable.app_exe = "mycoolapp"
       app_info = 
 """
   My Cool App - It does stuff and things!
@@ -81,7 +81,7 @@ describe Commandable do
       end
 
       it "hides the doesn't show [parameters] in the usage instructions" do
-        Commandable.app_name = "fakeapp"
+        Commandable.app_exe = "fakeapp"
         execute_output_s([]).should_not match(/\[parameters\]/)
       end
 
@@ -108,7 +108,7 @@ describe Commandable do
 
     before(:each) do 
       load 'private_methods_bad.rb'
-      Commandable.app_name = "mycoolapp"
+      Commandable.app_exe = "mycoolapp"
       Commandable.app_info = 
 """  My Cool App - It does stuff and things!
   Copyright (c) 2011 Acme Inc."""
@@ -135,8 +135,8 @@ describe Commandable do
         specify {lambda {Commandable.color_app_info = c.black}.should change{Commandable.help}}
       end
 
-      context "when app_name is changed" do
-        specify {lambda {Commandable.color_app_name = c.black}.should change{Commandable.help}}
+      context "when app_exe is changed" do
+        specify {lambda {Commandable.color_app_exe = c.black}.should change{Commandable.help}}
       end
 
       context "when color_command is changed" do

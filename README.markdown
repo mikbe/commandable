@@ -1,7 +1,9 @@
 # Commandable
-The easiest way to add command line control to your Ruby app. If you don't find **Commandable** incredibly easy to use I will give you one billions dollars!\* (\*not a legally binding offer)
+The easiest way to add command line control to your Ruby app.
 
-Stop wasting time writing wet command line interpreters or even writing code for the existing ones. Then writing help functions that you have to constantly change as your code changes. Now you can add a single line above an existing method and that method will be available from the command line. Best of all the help/usage instructions are automatically generated using the method itself so if you change your methods the help instructions change without any more effort on your part!
+Stop wasting time writing WET (Write Everything Twice) command line interpreters, or repeatedly writing code for existing ones like optparser, then writing help/usage methods that you constantly have to update as your code changes. Now you can add a single line above an existing method and that method will be available from the command line.
+
+Best of all the help/usage instructions are automatically generated using the method itself! When you change your methods the help instructions change automajically! There's no extra effort needed on your part.
 
 The whole process can take as little as four lines of code:  
 
@@ -181,7 +183,7 @@ A typical help output looks something like this:
     Command Parameters Description
       error            : Will raise a programmer error, not a user error
                          so you see what happens when you have bad code
-    examples [path]     : Copies the test classes to a folder so
+   examples [path]     : Copies the test classes to a folder so
                          you can see a bunch of small examples
      readme            : displays the readme file (default)
           v            : <xor> Application Version
@@ -203,19 +205,19 @@ If you would like to see a bunch of simple classes that demonstrate its uses run
 
 ### Commandable Options
 
-These are the basic options you will want to be aware of. Specifically you really want to set `Commandable#app_name` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.
+These are the basic options you will want to be aware of. Specifically you really want to set `Commandable#app_exe` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.
 
-**Commandable.app\_name**  
+**Commandable.app\_exe**  
 _default = ""_  
-Set this and the help instructions will include your application's name.
+This is what a user would type to run your app; don't set it to "My App" set it to "myapp". When this is set the help instructions will include a usage line with your executables name. 
 
 **Commandable.app\_info**  
 _default = ""_  
 This is informational text that will print above the help/usage instructions.
 
 **Commandable.verbose\_parameters**  
-_default = true_  
-If set to false help instructions will not print out default values.  
+_default = false_  
+If set to true help instructions will include the default values in the parameter list.  
 **Important!** This should only be set once, after you `require 'commandable'` but before any of your code files load. Changing the value after files are loaded will make no difference since parameters are only parsed when the source file loads.
     
     Commandable.verbose_parameters = true
@@ -239,7 +241,7 @@ Then you can do something like this:
     c = Term::ANSIColorHI
     
     Commandable.color_app_info           = c.intense_white  + c.bold
-    Commandable.color_app_name           = c.intense_green  + c.bold
+    Commandable.color_app_exe           = c.intense_green  + c.bold
     Commandable.color_command            = c.intense_yellow
     Commandable.color_description        = c.intense_white
     Commandable.color_parameter          = c.intense_cyan
@@ -261,7 +263,7 @@ The color the app_info text will be in the help message
 
 **Commandable.color\_app\_name**  
 _default = intense\_green_ + bold  
-The color the app_name will be in the usage line in the help message
+The color the app_exe will be in the usage line in the help message
 
 **Commandable.color\_command**  
 _default = intense\_yellow_  
@@ -314,7 +316,7 @@ After you've added a command method and a description above a method you can the
     # The array is automatically sorted by priority (higher numbers first, 10 > 0)
     
     # First get the array of commands
-    command_queue = Commandable.execution_queue(ARGV) # no need to give it ARGV
+    command_queue = Commandable.execution_queue(ARGV) # #ARGV will be cloned so it won't change it
 
     # Loop through the array calling the commands and dealing with the results
     command_queue.each do |cmd|
@@ -357,7 +359,7 @@ You just need to configure your bin file with the app settings and then run `Com
     require 'commandable'
     Commandable.verbose_parameters = false
     Commandable.color_output = true
-    Commandable.app_name = "My App"
+    Commandable.app_exe = "myapp"
     Commandable.app_info =
     """
       My App - It does stuff and things!
@@ -392,6 +394,7 @@ All done... for now.
 
 ###Next version:
 
+* Add a way to use or discover version numbers. Might have to force standardization and not allow configuration since it should be DRY.
 * Needs a massive refactoring.
 * Add a generator to automatically add Commandable support to your app.
 * Reorganize docs to be more logical and less the result of my scribblings as I develop.
