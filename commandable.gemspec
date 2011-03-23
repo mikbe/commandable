@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors                 = ["Mike Bethany"]
   s.email                   = ["mikbe.tk@gmail.com"]
   s.homepage                = "http://mikbe.tk"
-  s.summary                 = %q{The easiest way to add command line control to your app.}
+  s.summary                 = %q{The easiest way to add command line control to your Ruby apps.}
   s.description             = <<EOF
 The easiest way to add command line control to your Ruby app.
 
