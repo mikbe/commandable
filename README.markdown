@@ -22,7 +22,7 @@ I have the gem set up to ask if you would like to test on install so please allo
 
 You can take a look at the test results yourself here:
 
-<http://test.rubygems.org/gems/hashmodel/v/0.4.0>
+<http://test.rubygems.org/gems/commandable/v/0.4.0>
 
 Thanks for your help.
 
