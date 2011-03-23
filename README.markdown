@@ -16,6 +16,17 @@ Don't think of **Commandable** as a way to add command line switches to your app
 
 You can now "use your words" to let people interact with your apps in a natural way.
 
+## Testing for a Better Tomorrow ##
+
+I have the gem set up to ask if you would like to test on install so please allow the tests to run and upload. This will allow me to find any problems on different platforms. 
+
+You can take a look at the test results yourself here:
+
+<http://test.rubygems.org/gems/hashmodel/v/0.4.0>
+
+Thanks for your help.
+
+
 ## Status
 
 2011-03-21 - Release Cadidate: 0.2.0.rc1

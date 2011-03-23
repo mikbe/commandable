@@ -26,7 +26,7 @@ The whole process can take as little as four lines of code:
 * Then an `extend Commandable` inside your class.
 * And finally a call to `Commandable.execute(ARGV)` in your bin file. 
 
-Don't think of **Commandable** as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that mean one thing in one program and something completely different in another. (Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!)
+Don't think of Commandable as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that mean one thing in one program and something completely different in another. (Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!)
 
 You can now "use your words" to let people interact with your apps in a natural way.
 EOF
