@@ -29,7 +29,7 @@ Thanks for your help.
 
 ## Status
 
-2011-03-21 - Release Cadidate: 0.2.0.rc1
+2011-03-21 - Release: 0.2.0
 
 
 ## Principle of Least Surprise
