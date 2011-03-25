@@ -1,20 +1,23 @@
 # Commandable
-The easiest way to add command line control to your Ruby app.
+The easiest way to add command line control to your Ruby app.  
 
-Stop wasting time writing WET (Write Everything Twice) command line interpreters, or repeatedly writing code for existing ones like optparser, then writing help/usage methods that you constantly have to update as your code changes. Now you can add a single line above an existing method and that method will be available from the command line.
+Stop wasting time writing WET (Write Everything Twice) command line interpreters, or repeatedly writing code for existing ones like optparser, then writing help/usage methods that you constantly must update as your code changes. Now you can add a single line above an existing method and that method will be available from the command line.  
 
-Best of all the help/usage instructions are automatically generated using the method itself! When you change your methods the help instructions change automajically! There's no extra effort needed on your part.
+Best of all the help/usage instructions are automatically generated using the method itself! When you change your methods the help instructions change automajically! There's no extra effort needed on your part.  
 
 The whole process can take as little as four lines of code:  
 
-* You put a `command "I do something!"` line above your method.
 * Add a `require 'commandable'` line somewhere (I'd put it in my bin).
 * Then an `extend Commandable` inside your class.
-* And finally a call to `Commandable.execute(ARGV)` in your bin file. 
+* Put a `command "I do something!"` line above your method.
+* And finally make a call to `Commandable.execute(ARGV)` in your bin file. 
 
-Don't think of **Commandable** as a way to add command line switches to your app but as a way to allow your app to be driven directly from the command line. No more confusing switches that mean one thing in one program and something completely different in another. (Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!)
+Now any method you want to make accessible from the command line requires just a single line of code and it's right where your method is so it's easy to find when you do want to change some functionality.
 
-You can now "use your words" to let people interact with your apps in a natural way.
+Don't think of **Commandable** as a way to add command line switches, it's much more than that. Think of it as a way to allow your app to be driven directly from the command line. 
+
+You can now "use your words" to let people interact with your apps in a natural way. No more confusing switches that mean one thing in one program and something completely different in another. Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!
+
 
 ## Testing for a Better Tomorrow ##
 
@@ -34,12 +37,12 @@ Thanks for your help.
 
 ## Principle of Least Surprise
 
-I've tried to follow the principle of least surprise so Commandable should just work like you would expect it to. As long as you expect it to work the same way as I do.
+I've tried to follow the principle of least surprise so Commandable should just work like you would expect it to. As long as you expect it to work the same way as I do.  
 
 ## Requirements ##
 
 * Ruby 1.9.2
-* *Nix OS (Probably works on Windows but not tested yet)
+* Any Posix OS (Probably works on Windows too but not yet tested)
 
 ## Installation  
 From the command line:  
@@ -49,17 +52,17 @@ From the command line:
     
 ## Usage Instructions
 
-After installing the **Commandable** gem require it somewhere that gets loaded before your class does:
+After installing the **Commandable** gem require it somewhere that gets loaded before your class does:  
 
     require 'commandable'
 
-Extend your class with the **Commandable** module:
+Extend your class with the **Commandable** module:  
     
     class Widget
       extend Commandable
     
 Then put `command` and a description above the method you want to make accessible. The description is optional but can be helpful
-since it's used when automatically building your help/usage instructions.
+since it's used when automatically building your help/usage instructions.  
 
       command "create a new widget"
       def new(name)
@@ -71,46 +74,48 @@ since it's used when automatically building your help/usage instructions.
     command ["description"], [:required], [:default], [:priority=>(0...n)], [:xor[=>:group_name]]
 
 _**command**_ _(required)_  
-This is the only thing that's required. It tells **Commandable** to add the method that follows to the list of methods available from the command line.
+This is the only thing that's required. It tells **Commandable** to add the method that follows to the list of methods available from the command line.  
 
 _**description**_ [optional]  
-As you would imagine this is a short description of what the method does. You can have multiple lines by using a new line, `\n`, in the description and your description will be lined up properly. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).
+As you would imagine this is a short description of what the method does. You can have multiple lines by using a new line, `\n`, in the description and your description will be lined up properly. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).  
 
 _**:required**_ [optional]  
-You can mark a method as required and the user must specify this command and any required parameters every time they run your app. Note that while you can have a method marked as both :default and :required that would be kind of pointless since :required means they have to type out the name of the function and :default means they don't.
+You can mark a method as required and the user must specify this command and any required parameters every time they run your app. Note that while you can have a method marked as both :default and :required that would be kind of pointless since :required means they have to type out the name of the function and :default means they don't.  
 
 _**:default**_ [optional]  
-You can have one and only one default method. This method will be called if your app is called with just parameters or if the first command line parameter isn't a command. The user can still give more commands after the parameters for the default command too.
+You can have one and only one default method. This method will be called if your app is called with just parameters or if the first command line parameter isn't a command. The user can still give more commands after the parameters for the default command too.  
  
-For instance say your default method is :foo that takes one parameter and you have another method called :bar that also takes one parameter. A user could do this:
+For instance say your default method is :foo that takes one parameter and you have another method called :bar that also takes one parameter. A user could do this:  
 
     yourapp "Some Parameter" bar "A parameter for bar"
 
-Just be aware that if they give an option that has the same name as a function the app will think it's a command.
+Just be aware that if they give an option that has the same name as a function the app will think it's a command.  
 
 _**priority=>n**_ [optional]  
-This optional setting allows you to assign priorities to your methods so if you need them to be executed in a specific order, regardless of how the user specifies them on the command line, you can use this. Then when you execute the command line or ask for a queue of commands they will be sorted for you by priority.
+This optional setting allows you to assign priorities to your methods so if you need them to be executed in a specific order, regardless of how the user specifies them on the command line, you can use this. Then when you execute the command line or ask for a queue of commands they will be sorted for you by priority.  
 
-The higher the priority the sooner the method will be executed. If you do not specify a priority a method will have a priority of 0, the lowest priority. 
+The higher the priority the sooner the method will be executed. If you do not specify a priority a method will have a priority of 0, the lowest priority.  
 
-Note that you can have a default method with a lower priority than a non-default method.
+Note that you can have a default method with a lower priority than a non-default method.  
 
 _**:xor[=>:whatever]**_ [optional]  
-The :xor parameter allows you to configure a group of methods as mutually exclusive, i.e. if method1 and method2 are in the same :xor group the user of your application can only call one of them at a time.
+The :xor parameter allows you to configure a group of methods as mutually exclusive, i.e. if method1 and method2 are in the same :xor group the user of your application can only call one of them at a time.  
 
-You can use just the :xor symbol and the method will be put into the default XOR group, called :xor so :xor=>:xor, but if you need multiple XOR groups you can specify a group name by using a hash instead of just the :xor symbol.
+You can use just the :xor symbol and the method will be put into the default XOR group, called :xor so :xor=>:xor, but if you need multiple XOR groups you can specify a group name by using a hash instead of just the :xor symbol.  
 
-The XOR group name will be printed in the front to the description text so it's probably a good idea to use :xor as the prefix.
+The XOR group name will be printed in the front to the description text so it's probably a good idea to use :xor as the prefix.  
 
 
 ### Parameter lists
-The parameter lists for each method that are printed out in the usage/help instructions are built using the names you give them so you should make sure to use descriptive names. Also keep in mind that all command line parameters are strings so you need to deal with that inside your methods if what you really want is a number.
+When building the help/usage instructions a list of parameters for each command is automatically created using the names you give the parameters in your method; make sure you use descriptive names.  
 
-If none of your methods have parameters then there won't be any reference to parameters in the help/usage instructions.
+Also keep in mind that all command line parameters are strings so you need to deal with that inside your methods if what you really want is a number.  
+
+If none of your methods have parameters then there won't be any reference to parameters in the help/usage instructions. The description text will be moved over to be closer to your commands.  
 
 ### A complete class
 
-A complete class might look like this:
+A complete class might look like this:  
 
     require 'commandable'
 
@@ -123,8 +128,8 @@ A complete class might look like this:
       end
 
       command "destroy an existing widget", :xor
-      def disassemble(name)
-        "No dissaemble #{name}! #{name} is alive!"
+      def delete(name)
+        "No disassemble #{name}! #{name} is alive!"
       end
       
       command "spend lots of money to update a widget", :xor
@@ -132,10 +137,15 @@ A complete class might look like this:
         "You just gave #{name} a nice new coat of paint!"
       end
 
+      command "your security key must be entered for every command", :required
+      def key(security)
+        # blah, blah, blah
+      end
+
     end
 
 #### Class methods
-You can also use it on class methods:
+You can also use it on class methods:  
 
     require "commandable"
 
@@ -156,7 +166,7 @@ You can also use it on class methods:
       end
     end
 
-If you want to do a block of class commands using `class << self` you need to put `extend Commandable` inside the block:
+If you want to do a block of class commands using `class << self` you need to put `extend Commandable` inside the block:  
 
     require "commandable"
 
@@ -177,31 +187,33 @@ If you want to do a block of class commands using `class << self` you need to pu
     end
 
 
-Note: Class methods are called directly on the class while instance methods have an instance created for that call. Keep that in mind if you need to share data between calls. In that case you might want to store your data in a model you create outside the execution queue.
+Note: Class methods are called directly on the class while instance methods have an instance created for that call. Keep that in mind if you need to share data between calls. In that case you might want to store your data in a model you create outside the execution queue.  
 
 ### Automatic usage/help generation ###
 
-One of the great features of **Commandable** is that it will automatically create usage instructions based on your methods and the descriptions you provide for them. The `help` command is also added for you automatically. If your app has no default or it has a default command that requires parameters the help/usage instructions will be printed if a user just runs your app without any input.
+One of the great features of **Commandable** is that automatically creates usage instructions based on your methods and the descriptions you provide for them and it adds a `help` command for you.  
+
+If your app has no `:default` method or it has a default command that requires parameters the help/usage instructions will be printed if a user just runs your app without any input.  
 
 A typical help output looks something like this:  
 
-    Commandable - The easiest way to add command line control to your app.
-    Copyrighted free software - Copyright (c) 2011 Mike Bethany.
-    Version: 0.2.0
+     Commandable - The easiest way to add command line control to your app.
+     Copyrighted free software - Copyright (c) 2011 Mike Bethany.
+     Version: 0.2.0
 
-    Usage: commandable <command> [parameters] [<command> [parameters]...]
+     Usage: commandable <command> [parameters] [<command> [parameters]...]
 
-    Command Parameters Description
-      error            : Will raise a programmer error, not a user error
-                         so you see what happens when you have bad code
-   examples [path]     : Copies the test classes to a folder so
-                         you can see a bunch of small examples
-     readme            : displays the readme file (default)
-          v            : <xor> Application Version
-    version            : <xor> Application Version
-     widget [path]     : Copies a fully working app demonstrating how
-                         to use Commandable with RSpec and Cucumber
-       help            : you're looking at it now
+      Command Parameters Description
+       error            : Will raise a programmer error, not a user error
+                          so you see what happens when you have bad code
+    examples [path]     : Copies the test classes to a folder so
+                          you can see a bunch of small examples
+      readme            : displays the readme file (default)
+           v            : <xor> Application Version
+     version            : <xor> Application Version
+      widget [path]     : Downloads a fully working app demonstrating how
+                          to use Commandable with RSpec and Cucumber
+        help            : you're looking at it now
 
 
 
@@ -210,17 +222,19 @@ For a fully working example with RSpec and Cucumber tests run this command:
 
     $ commandable widget [path]
 
-If you would like to see a bunch of simple classes that demonstrate its uses run:
+In addition **Commandable** uses **Commandable** for its own command line options so you can also look at the `lib/commandable/app_controller.rb class` for an example.  
+
+If you would like to see a bunch of simple classes that demonstrate **Commandable**'s uses run:
 
     $ commandable examples [path]
 
 ### Commandable Options
 
-These are the basic options you will want to be aware of. Specifically you really want to set `Commandable#app_exe` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.
+These are the basic options you'll want to be aware of. Specifically you really want to set `Commandable#app_exe` and `Commandable#app_info` so that the help/usage instructions are fully fleshed out.  
 
 **Commandable.app\_exe**  
 _default = ""_  
-This is what a user would type to run your app; don't set it to "My App" set it to "myapp". When this is set the help instructions will include a usage line with your executables name. 
+This is what a user would type to run your app; don't set it to "My App" set it to "myapp". When this is configured the help instructions will include a usage line with your executable's name. 
 
 **Commandable.app\_info**  
 _default = ""_  

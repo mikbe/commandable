@@ -13,7 +13,7 @@ module Commandable
         `open #{File.expand_path((File.dirname(__FILE__) + '/../../readme.markdown'))}`
       end
       
-      command "Copies a fully working app demonstrating how\nto use Commandable with RSpec and Cucumber"
+      command "Downloads a fully working app demonstrating how\nto use Commandable with RSpec and Cucumber"
       # Creates a simple example app demonstrating a fully working app
       def widget(path="./widget")
         # Test for Git
@@ -21,7 +21,7 @@ module Commandable
           puts "Git must be installed to download Widget (You're a developer and you don't have Git installed?)"
           return
         end
-        # Git already has all of it's own error trapping 
+        # Git already has all of its own error trapping so
         # it would be horrible coupling and duplication
         # of effort to do anything on my end for failures.
         puts "\nUnable to download Widget. You can find the souce code here:\nhttps#{WIDGET_GITHUB}" unless download_widget(path) == 0
@@ -46,7 +46,7 @@ module Commandable
         FileUtils.copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)
       end
 
-      command "Will raise a programmer error, not a user error\nso you see what happens when you have bad code"
+      command "Will raise a programmer error, not a user error\nso you can see what happens when you have bad code"
       # Causes an error so you can see what it will look like if you have an error in your code.
       def error
         raise Exception, "An example of a non-user error caused by your bad code trapped in Commandable.execute()"
