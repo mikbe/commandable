@@ -21,7 +21,13 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Testing for a Better Tomorrow ##
 
-I have the gem set up to ask if you would like to test on install so please allow the tests to run and upload. This will allow me to find any problems on different platforms. 
+In an effort to make the best possible software I'm asking anyone that would like to help out to run the BDD/TDD tests included with the gem. If you don't already have the `rubygems-test` gem installed please install it:
+
+    $ gem install rubygems-test
+
+And then run the tests on your machine:
+
+    $ gem test commandable
 
 You can take a look at the test results yourself here:
 
