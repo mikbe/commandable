@@ -29,7 +29,7 @@ And then run the tests on your machine:
 
     $ gem test commandable
 
-You can take a look at the test results yourself here:
+And of course upload them when it asks you if it can. You can take a look at the test results yourself here:
 
 <http://test.rubygems.org/gems/commandable/v/0.2.0>
 
