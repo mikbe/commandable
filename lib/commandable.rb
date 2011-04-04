@@ -1,5 +1,4 @@
 require 'monkey_patch/file_utils'
-require 'monkey_patch/os'
 require 'commandable/version'
 require 'commandable/exceptions'
 require 'commandable/commandable'

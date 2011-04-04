@@ -20,7 +20,6 @@ EOF
   s.license = 'MIT'
 
   s.add_dependency("term-ansicolor-hi", "~>1.0.7")
-  s.add_dependency("sys-uname", "~>0.8.5")
   
   s.add_development_dependency("rspec", "~>2.5")
   s.add_development_dependency("cucumber", "~>0.10")

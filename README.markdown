@@ -49,7 +49,7 @@ I've tried to follow the principle of least surprise so Commandable should just 
 ## Requirements ##
 
 * Ruby 1.9.2
-* Any Posix OS (Probably works on Windows too but not yet tested)
+* Any Posix OS (It works, mostly, on Windows but ironically some of the tests won't run because of some unix commands I use in the tests)
 
 ## Installation  
 From the command line:  
