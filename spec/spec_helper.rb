@@ -49,15 +49,15 @@ end
 # Executes a command capturing STDOUT and STDERR as an array representing each line
 # Traps errors so not to be used for testing lambad{}.should_not raise_error
 # or should raise_error since you won't get the error
-def execute_output_ary(argv)
-  execute_output_s(argv).split(%r{\n})
+def execute_output_ary(argv, silent=false)
+  execute_output_s(argv, silent).split(%r{\n})
 end
 
 # Executes a command capturing STDOUT and STDERR as one string
 # Traps errors so not to be used for testing lambad{}.should_not raise_error
 # or should raise_error since you won't get the error
-def execute_output_s(argv)
-  output = capture_output{Commandable.execute(argv)}
+def execute_output_s(argv, silent=false)
+  output = capture_output{Commandable.execute(argv, silent)}
   output[:stdout] + output[:stderr]
 end
 

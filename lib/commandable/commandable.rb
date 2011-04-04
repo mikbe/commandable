@@ -144,11 +144,12 @@ module Commandable
     # A wrapper for the execution_queue that runs the queue and traps errors. 
     # If an error occurs inside this method it will print out a complete.
     # of availavle methods with usage instructios and exit gracefully.
-    def execute(argv)
+    def execute(argv, silent=false)
       begin
         command_queue = execution_queue(argv)
         command_queue.each do |com|
-          puts com[:proc].call
+          return_value = com[:proc].call
+          puts return_value unless silent
         end
       rescue Exception => exception
         if exception.respond_to?(:friendly_name)
@@ -177,6 +178,7 @@ module Commandable
       arguments << "help" if arguments.empty?
       
       # Parse the command line into methods and their parameters
+      
       arguments.each do |arg|
         if Commandable[arg]
           last_method = arg.to_sym
@@ -196,11 +198,19 @@ module Commandable
           end
           method_hash[last_method] << arg
         end
+        # Test for missing required switches
         @@commands.select do |key, value|
-          raise MissingRequiredCommandError, key if value[:required] and method_hash[key].nil?
+          if value[:required] and method_hash[key].nil?
+            # If the required switch is also a default have the error be a missing parameter instead of a missing command
+            if value[:default]
+              method_hash.merge!(key=>[])
+            else
+              raise MissingRequiredCommandError, key 
+            end
+          end
         end
       end
-      #puts "method_hash: #{method_hash}" if method_hash.to_s.include?("some_accesor")
+      #puts "method_hash: #{method_hash}" if method_hash.to_s.include?("required_default")
       
       # Build an array of procs to be called for each method and its given parameters
       proc_array = []
@@ -215,7 +225,7 @@ module Commandable
           # Get a list of required parameters and make sure all of them were provided
           required = command[:parameters].select{|param| [:req, :writer].include?(param[0])}
           required.shift(params.count)
-          raise MissingRequiredParameterError, {:method=>meth, :parameters=>required.collect!{|meth| meth[1]}.to_s[1...-1].gsub(":","")} unless required.empty?
+          raise MissingRequiredParameterError, {:method=>meth, :parameters=>required.collect!{|meth| meth[1]}.to_s[1...-1].gsub(":",""), :default=>command[:default]} unless required.empty?
         end
         
         # Test for duplicate XORs
@@ -267,7 +277,7 @@ module Commandable
     def set_colors
       if color_output
         @c_app_info           = @color_app_info
-        @c_app_exe           = @color_app_exe
+        @c_app_exe            = @color_app_exe
         @c_command            = @color_command
         @c_description        = @color_description
         @c_parameter          = @color_parameter

@@ -43,7 +43,10 @@ module Commandable
     end
     # Create a new instance of the MissingRequiredParameterError class
     def initialize(msg)
-      super("The command \"#{msg[:method]}\" is missing the required parameter \"#{msg[:parameters]}\".")
+      super("""
+  The #{"default " if msg[:default]}command \"#{msg[:method]}\" is missing the required parameter \"#{msg[:parameters]}\".
+  #{"You don't have to specifically say \"#{msg[:method]}\" but you do have to give the parameter." if msg[:default]}"
+      )
     end
   end
 

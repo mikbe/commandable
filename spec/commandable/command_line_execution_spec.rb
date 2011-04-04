@@ -92,13 +92,18 @@ describe Commandable do
       end
 
       context "and automatically executing commands" do
-        specify {execute_output_ary(["foo", "1", "2.4"]).should == ["1", "2.4"]}
-        specify {execute_output_ary(["bar", "234"]).should == ["234", "Number 42"]}
-        specify {execute_output_ary(["bar", "39", "potato"]).should == ["39", "potato"]}
-        specify {execute_output_ary(["qux"]).should == ["1492", "I'm a tricky one"]}
-        specify {execute_output_ary(["qux", "991"]).should == ["991", "I'm a tricky one"]}
-        specify {execute_output_ary(["qux", "1821", "Look I've got %special\"characters\" in me"]).should == 
+        it {execute_output_ary(["foo", "1", "2.4"]).should == ["1", "2.4"]}
+        it {execute_output_ary(["bar", "234"]).should == ["234", "Number 42"]}
+        it {execute_output_ary(["bar", "39", "potato"]).should == ["39", "potato"]}
+        it {execute_output_ary(["qux"]).should == ["1492", "I'm a tricky one"]}
+        it {execute_output_ary(["qux", "991"]).should == ["991", "I'm a tricky one"]}
+        it {execute_output_ary(["qux", "1821", "Look I've got %special\"characters\" in me"]).should == 
           ["1821", "Look I've got %special\"characters\" in me"]}
+          
+        context "when specifying that it should be silent" do
+          it {execute_output_s(["foo", "1", "2.4"], :silent).should be_empty}
+        end
+
       end
 
       context "and using the execution_queue command" do
