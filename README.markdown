@@ -87,7 +87,7 @@ _**description**_ [optional]
 As you would imagine this is a short description of what the method does. You can have multiple lines by using a new line, `\n`, in the description and your description will be lined up properly. This prints in the help/usage instructions when a user calls your programing using the command "help" or if they try to issue a command that doesn't exist. Help instructions will also print if they try to use your app without any parameters (if there isn't a default method that doesn't require parameters.).  
 
 _**:required**_ [optional]  
-You can mark a method as required and the user must specify this command and any required parameters every time they run your app. Note that while you can have a method marked as both :default and :required that would be kind of pointless since :required means they have to type out the name of the function and :default means they don't.  
+You can mark a method as required and the user must specify this command and any required parameters every time they run your app. You can also have a method marked as both :default and :required which allows you to run a method with a required parameter but you don't have to type the method name.
 
 _**:default**_ [optional]  
 You can have one and only one default method. This method will be called if your app is called with just parameters or if the first command line parameter isn't a command. The user can still give more commands after the parameters for the default command too.  

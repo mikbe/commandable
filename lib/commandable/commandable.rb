@@ -235,8 +235,12 @@ module Commandable
    
     # Set colors to their default values
     def reset_colors
-      # Colors - off by default
-      @color_output      ||= true
+      # Colors - off by default for windows
+      if is_windows?
+        @color_output      ||= false
+      else
+        @color_output      ||= true
+      end
       # Build the default colors
       Term::ANSIColorHI.coloring = color_output
       c = Term::ANSIColorHI
