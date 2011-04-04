@@ -143,7 +143,10 @@ module Commandable
     
     # A wrapper for the execution_queue that runs the queue and traps errors. 
     # If an error occurs inside this method it will print out a complete.
-    # of availavle methods with usage instructios and exit gracefully.
+    # of availavle methods with usage instructions and exit gracefully.
+    #
+    # If you do not with the output from your methods to be printed out automatically
+    # run the execute command with silent set to anything other than false or nil.
     def execute(argv, silent=false)
       begin
         command_queue = execution_queue(argv)
