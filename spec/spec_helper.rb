@@ -47,16 +47,22 @@ def capture_output
 end
 
 # Executes a command capturing STDOUT and STDERR as an array representing each line
+# Traps errors so not to be used for testing lambad{}.should_not raise_error
+# or should raise_error since you won't get the error
 def execute_output_ary(argv)
   execute_output_s(argv).split(%r{\n})
 end
 
 # Executes a command capturing STDOUT and STDERR as one string
+# Traps errors so not to be used for testing lambad{}.should_not raise_error
+# or should raise_error since you won't get the error
 def execute_output_s(argv)
   output = capture_output{Commandable.execute(argv)}
   output[:stdout] + output[:stderr]
 end
 
+# Exectues a command queue returning the results
+# Use when you want to make sure you don't raise an error
 def execute_queue(argv)
   queue = Commandable.execution_queue(argv)
   queue.collect{|meth| meth[:proc].call}

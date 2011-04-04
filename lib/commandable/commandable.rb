@@ -53,6 +53,12 @@ module Commandable
       @@commands.dup
     end
     
+    # A hash of instances created when calling instance methods
+    # It's keyed using the class name: {"ClassName"=>#<ClassName:0x00000100b1f188>}
+    def class_cache
+      @@class_cache
+    end
+    
     # Access the command array using the method name (symbol or string)
     def [](index)
       raise AccessorError unless index.is_a? String or index.is_a? Symbol
@@ -68,8 +74,8 @@ module Commandable
       @app_exe = nil
       @verbose_parameters = true
       @@default_method = nil
+      @@class_cache = {}
     end
-    alias :init :reset_all
     
     # Clears all methods from the list of available commands
     # This is mostly useful for testing.
@@ -170,7 +176,7 @@ module Commandable
       end
       arguments << "help" if arguments.empty?
       
-      # Parse the commad line into methods and their parameters
+      # Parse the command line into methods and their parameters
       arguments.each do |arg|
         if Commandable[arg]
           last_method = arg.to_sym
@@ -190,29 +196,37 @@ module Commandable
           end
           method_hash[last_method] << arg
         end
-        @@commands.select do |key, value| 
+        @@commands.select do |key, value|
           raise MissingRequiredCommandError, key if value[:required] and method_hash[key].nil?
         end
       end
-
+      #puts "method_hash: #{method_hash}" if method_hash.to_s.include?("some_accesor")
+      
       # Build an array of procs to be called for each method and its given parameters
       proc_array = []
       method_hash.each do |meth, params|
         command = @@commands[meth]
+
+        if command[:parameters] && !command[:parameters].empty?
+          
+          #Change the method name for attr_writers
+          meth = "#{meth}=" if command[:parameters][0][0] == :writer
         
-        # Test for missing parameters
-        required = command[:parameters].select{|param| param[0]==:req} if command[:parameters]
-        if required
+          # Get a list of required parameters and make sure all of them were provided
+          required = command[:parameters].select{|param| [:req, :writer].include?(param[0])}
           required.shift(params.count)
           raise MissingRequiredParameterError, {:method=>meth, :parameters=>required.collect!{|meth| meth[1]}.to_s[1...-1].gsub(":","")} unless required.empty?
         end
-
+        
         # Test for duplicate XORs
         proc_array.select{|x| x[:xor] and x[:xor]==command[:xor] }.each {|bad| raise ExclusiveMethodClashError, "#{meth}, #{bad[:method]}"}
 
         klass = Object
         command[:class].split(/::/).each { |name| klass = klass.const_get(name) }
-        klass = klass.new unless command[:class_method]
+        ## Look for class in class cache
+        unless command[:class_method]
+          klass = (@@class_cache[klass.name] ||= klass.new)
+        end
         proc_array << {:method=>meth, :xor=>command[:xor], :parameters=>params, :priority=>command[:priority], :proc=>lambda{klass.send(meth, *params)}}
       end
       proc_array.sort{|a,b| a[:priority] <=> b[:priority]}.reverse
@@ -273,7 +287,9 @@ module Commandable
     end
 
   end
-  init # automatically configure the module when it's loaded
+  
+  # inititialize the Commandable's settings when it's loaded
+  reset_all
 
   private 
   
@@ -281,6 +297,7 @@ module Commandable
   # It lets you add a method to the list of command line methods
   def command(*cmd_parameters)
 
+    @@attribute = nil
     @@method_file = nil
     @@method_line = nil
     @@command_options = {}
@@ -310,6 +327,8 @@ module Commandable
     
     set_trace_func proc { |event, file, line, id, binding, classname|
 
+      @@attribute = id if [:attr_accessor, :attr_writer].include?(id)
+      
       # Traps the line where the method is defined so we can look up 
       # the method source code later if there are optional parameters
       if event == "line" and !@@method_file
@@ -328,8 +347,15 @@ module Commandable
   # Add a method to the list of available command line methods
   def add_command(meth)
     @@commands.delete(:help)
-    argument_list = parse_arguments(@@command_options[:parameters])
+    
+    if @@attribute
+      argument_list = "value"
+      meth = meth.to_s.delete("=").to_sym if @@attribute == :attr_writer
+    else
+      argument_list = parse_arguments(@@command_options[:parameters])
+    end
     @@command_options.merge!(:argument_list=>argument_list,:class => self.name)
+    
     @@commands.merge!(meth => @@command_options)
     @@default_method = {meth => @@command_options} if @@command_options[:default]
 
@@ -337,13 +363,22 @@ module Commandable
     
     @@commands.merge!(HELP_COMMAND.dup) # makes sure the help command is always last
     @@command_options = nil
+    @@attribute = nil
   end
 
   # Trap method creation after a command call 
   def method_added(meth)
     set_trace_func(nil)
     return super(meth) if meth == :initialize || @@command_options == nil
-    @@command_options.merge!(:parameters=>self.instance_method(meth).parameters,:class_method=>false)
+    
+    if @@attribute
+      #synthesize parameter
+      @@command_options.merge!(:parameters=>[[:writer, :value]],:class_method=>false)
+    else
+      # create parameter
+      @@command_options.merge!(:parameters=>self.instance_method(meth).parameters,:class_method=>false)
+    end
+    
     add_command(meth)
   end
   
@@ -386,10 +421,10 @@ module Commandable
   # Reads a line from a source code file.
   def readline(file, line_number)
     current_line = 0
-    File.open(file).each { |line_text|
+    File.open(file).each do |line_text|
       current_line += 1
       return line_text.strip if current_line == line_number
-    }
+    end
   end
   
   # Parses a method defition for the optional values of given argument.

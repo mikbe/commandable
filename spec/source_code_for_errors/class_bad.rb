@@ -1,4 +1,3 @@
-@@command_options
 require "commandable"
 
 class ClassBad

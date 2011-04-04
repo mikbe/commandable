@@ -38,8 +38,9 @@ Thanks for your help.
 
 ## Status
 
-2011-03-21 - Release: 0.2.0
+2011-04-04 - Version: 0.2.1 
 
+See change history for additions.
 
 ## Principle of Least Surprise
 
@@ -193,7 +194,7 @@ If you want to do a block of class commands using `class << self` you need to pu
     end
 
 
-Note: Class methods are called directly on the class while instance methods have an instance created for that call. Keep that in mind if you need to share data between calls. In that case you might want to store your data in a model you create outside the execution queue.  
+Note: Class methods are called directly on the class while instance methods have an instance created for all calls to that class. This means if you set an instance variable in one method it will be available to any other method calls to that same class; just as if you had created an instance of your class and called methods on it.
 
 ### Automatic usage/help generation ###
 
@@ -419,11 +420,22 @@ If you have any questions about how the code works I've tried to give as much in
 Most of all it should be simple to use so if you have any problems please drop me a line. Also if you make any changes please send me a pull request. I hate when people don't respond to them, even to deny them, so I'm pretty good about that sort of thing.
 
 
+## Version History ##
+
+2011-04-04 - Version: 0.2.1  
+
+* Added ability to use attr\_accessor and att\_writer as commands. You can only write to them of course but it's an easy way to set values.
+* Instance methods now retain state between different calls. In other words if you set an instance variable in one method it will be available to any other instance method calls for that class. It's as if you created an instance of your class and called the methods yourself. You can access the class instances using the hash Commandable.class\_cache. It is has the class name, a string, as the key and the instance of the class as the value. {"ClassName"=>#<ClassName:0x00000100b1f188>}
+
+2011-03-23 - Version: 0.2.0  
+
+* First public release. It's 0.2.0 because 0.1.0 was called Cloptions and wasn't released.
+
 ## To Do
 
-All done... for now.
+Nothing in this version.
 
-###Next version:
+### Next major version:
 
 * Add a way to use or discover version numbers. Might have to force standardization and not allow configuration since it should be DRY.
 * Needs a massive refactoring.
