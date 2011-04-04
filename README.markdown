@@ -198,7 +198,7 @@ Note: Class methods are called directly on the class while instance methods have
 
 ### Automatic usage/help generation ###
 
-One of the great features of **Commandable** is that automatically creates usage instructions based on your methods and the descriptions you provide for them and it adds a `help` command for you.  
+One of the great features of **Commandable** is that it automatically creates usage instructions based on your methods and the descriptions you provide for them. It then adds a `help` command for you that will print out these usage instructions when called.
 
 If your app has no `:default` method or it has a default command that requires parameters the help/usage instructions will be printed if a user just runs your app without any input.  
 
@@ -268,7 +268,7 @@ The help information can be colored using the standard ANSI escape commands foun
 
 Then you can do something like this:
 
-    require 'term/ansicolor'
+    require 'term/ansicolorhi'
     
     c = Term::ANSIColorHI
     
