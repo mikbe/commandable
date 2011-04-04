@@ -426,6 +426,8 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 * Added ability to use attr\_accessor and att\_writer as commands. You can only write to them of course but it's an easy way to set values.
 * Instance methods now retain state between different calls. In other words if you set an instance variable in one method it will be available to any other instance method calls for that class. It's as if you created an instance of your class and called the methods yourself. You can access the class instances using the hash Commandable.class\_cache. It is has the class name, a string, as the key and the instance of the class as the value. {"ClassName"=>#<ClassName:0x00000100b1f188>}
+* You can now have the execute command work without outputting anything. Just add :silent (or anything other than nil or false) to the execution method. For instance `Commandable.execute(ARGV,:silent)`.
+* Clarified error message for default methods that are also required. If you don't give anything it tells you you need to give a parameter but you don't specifically have to give the switch. 
 
 2011-03-23 - Version: 0.2.0  
 
