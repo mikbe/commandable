@@ -403,6 +403,11 @@ You just need to configure your bin file with the app settings and then run `Com
     # See the Widget app for an example of this.
     require 'yourappname'
     Commandable.execute(ARGV)
+    
+    # If you don't want the output from your methods to be printed automatically
+    # for instance if your method already outputs some text, you can add :silent
+    # to the execute command like this:
+    # Commandable.execute(ARGV, :silent)
  
 
 I actually prefer to create a separate file for my **Commandable** configuration and load it in my main app  file in the `lib` directory. Again, take a look at `Widget` to see what I mean. 
