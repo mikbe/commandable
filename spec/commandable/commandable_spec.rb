@@ -19,7 +19,7 @@ describe Commandable do
 
     context "when checking syntax" do
     
-      it "shouldn't rasie an error if nothing more than 'switch' is used" do
+      it "shouldn't raise an error if nothing more than 'switch' is used" do
         lambda{load 'no_description.rb'}.should_not raise_error(Commandable::SyntaxError)
       end
     

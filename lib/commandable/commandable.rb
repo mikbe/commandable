@@ -142,10 +142,10 @@ module Commandable
     end
     
     # A wrapper for the execution_queue that runs the queue and traps errors. 
-    # If an error occurs inside this method it will print out a complete.
+    # If an error occurs inside this method it will print out a complete list
     # of availavle methods with usage instructions and exit gracefully.
     #
-    # If you do not with the output from your methods to be printed out automatically
+    # If you do not want the output from your methods to be printed out automatically
     # run the execute command with silent set to anything other than false or nil.
     def execute(argv, silent=false)
       begin
@@ -154,6 +154,8 @@ module Commandable
           return_value = com[:proc].call
           puts return_value unless silent
         end
+      rescue SystemExit => kernel_exit
+        Kernel.exit kernel_exit.status
       rescue Exception => exception
         if exception.respond_to?(:friendly_name)
           set_colors

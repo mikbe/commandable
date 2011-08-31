@@ -36,11 +36,11 @@ And of course upload them when it asks you if it can. You can take a look at the
 Thanks for your help.
 
 
-## Status
+## Latest version
 
-2011-04-04 - Version: 0.2.1 
+2011-08-31 - Version: 0.2.2  
 
-See change history for additions.
+See change history for specific changes.  
 
 ## Principle of Least Surprise
 
@@ -49,7 +49,7 @@ I've tried to follow the principle of least surprise so Commandable should just 
 ## Requirements ##
 
 * Ruby 1.9.2
-* Any Posix OS (It works, mostly, on Windows but ironically some of the tests won't run because of some unix commands I use in the tests)
+* OS X or any Posix OS (It works, mostly, on Windows but ironically some of the tests won't run because of some Unix commands I use in the tests)
 
 ## Installation  
 From the command line:  
@@ -426,6 +426,11 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 
 ## Version History ##
+
+2011-08-31 - Version: 0.2.2
+
+* Added ability to do use Kernel.exit without Commandable trapping the error.
+* Kernel.exit properly forwards exit status if given one.
 
 2011-04-04 - Version: 0.2.1  
 
