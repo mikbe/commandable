@@ -429,23 +429,23 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 2011-08-31 - Version: 0.2.2
 
-* Added ability to do use Kernel.exit without Commandable trapping the error.
-* Kernel.exit properly forwards exit status if given one.
+* Added ability to do use Kernel.exit without Commandable trapping the error. (Andrew Vos)
+* Kernel.exit properly forwards exit status if given one. (Andrew Vos)
 
 2011-04-04 - Version: 0.2.1  
 
 * Added ability to use attr\_accessor and att\_writer as commands. You can only write to them of course but it's an easy way to set values.
-* Instance methods now retain state between different calls. In other words if you set an instance variable in one method it will be available to any other instance method calls for that class. It's as if you created an instance of your class and called the methods yourself. You can access the class instances using the hash Commandable.class\_cache. It is has the class name, a string, as the key and the instance of the class as the value. {"ClassName"=>#<ClassName:0x00000100b1f188>}
+* Instance methods now retain state between different calls. In other words if you set an instance variable in one method it will be available to any other instance method calls for that class. It's as if you created an instance of your class and called the methods yourself. You can access the class instances using the hash Commandable.class\_cache. It  uses the class name, a string, as the key and the instance of the class as the value. {"ClassName"=>#<ClassName:0x00000100b1f188>}
 * You can now have the execute command work without outputting anything. Just add :silent (or anything other than nil or false) to the execution method. For instance `Commandable.execute(ARGV,:silent)`.
 * Clarified error message for default methods that are also required. If you don't give anything it tells you you need to give a parameter but you don't specifically have to give the switch. 
 
 2011-03-23 - Version: 0.2.0  
 
-* First public release. It's 0.2.0 because 0.1.0 was called Cloptions and wasn't released.
+* First public release. It's 0.2.0 because 0.1.0, going by the name of Cloptions, wasn't released.
 
 ## To Do
 
-Nothing in this version.
+Add ability to easily use nested argument trees without hard-coding case blocks. For instance a command that takes set of commands like `foo remote set "ftp_svr" 10.250.1.100` or `foo remote delete "ftp_svr"`.
 
 ### Next major version:
 
