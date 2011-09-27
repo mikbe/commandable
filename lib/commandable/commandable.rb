@@ -161,11 +161,8 @@ module Commandable
           set_colors
           puts help("\n  #{@c_error_word}Error:#{@c_reset} #{@c_error_name}#{exception.friendly_name}#{@c_reset}\n  #{@c_error_description}#{exception.message}#{@c_reset}\n\n")
         else
-          puts "\n Bleep, bloop, bleep! Danger Will Robinson! Danger!"
-          puts "\n Error: #{exception.inspect}"
-          puts "\n Backtrace:"
+          puts exception.inspect
           puts exception.backtrace.collect{|line| " #{line}"}
-          puts
         end
       end
     end

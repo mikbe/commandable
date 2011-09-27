@@ -38,7 +38,7 @@ Thanks for your help.
 
 ## Latest version
 
-2011-08-31 - Version: 0.2.2  
+2011-09-27 - Version: 0.2.3  
 
 See change history for specific changes.  
 
@@ -427,7 +427,11 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 ## Version History ##
 
-2011-08-31 - Version: 0.2.2
+2011-09-27 - Version: 0.2.3  
+
+* Removed annoying error message print out.
+
+2011-08-31 - Version: 0.2.2  
 
 * Added ability to do use Kernel.exit without Commandable trapping the error. (Andrew Vos)
 * Kernel.exit properly forwards exit status if given one. (Andrew Vos)
