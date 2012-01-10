@@ -47,7 +47,10 @@ module Commandable
     attr_accessor :color_error_name
     # What color the error description will be in error messages
     attr_accessor :color_error_description
-    
+
+    # What escape code will be used to clear screen
+    attr_accessor :screen_clear
+
     # An array of methods that can be executed from the command line
     def commands
       @@commands.dup
@@ -115,8 +118,8 @@ module Commandable
       array =  [usage_text, ""]
       
       array.unshift additional_info if additional_info
-      array.unshift ("\e[2A" + @c_app_info + Commandable.app_info + @c_reset) if Commandable.app_info
-      array.unshift "\e[H\e[2J"
+      array.unshift (@c_app_info + Commandable.app_info + @c_reset) if Commandable.app_info
+      array.unshift @s_clear
       
       header_text = " #{" "*(max_command-cmd_length)}#{@c_command + @c_bold}Command#{@c_reset} "
       header_text += "#{@c_parameter + @c_bold}Parameters #{@c_reset}#{" "*(max_parameter-parm_length)}" if max_parameter > 0
@@ -265,6 +268,7 @@ module Commandable
       
       @color_bold               = c.bold
       @color_reset              = c.reset
+
       @screen_clear             = "\e[H\e[2J"
     end
 
@@ -291,10 +295,11 @@ module Commandable
         
         @c_bold               = @color_bold
         @c_reset              = @color_reset
+        @s_clear              = @screen_clear
       else
         @c_app_info, @c_app_exe, @c_command, @c_description,
         @c_parameter, @c_usage, @c_bold, @c_reset, @c_error_word,
-        @c_error_name, @c_error_description = [""]*12
+        @c_error_name, @c_error_description, @s_clear = [""]*40
       end
     end
 
