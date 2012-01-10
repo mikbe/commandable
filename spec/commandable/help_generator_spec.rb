@@ -128,6 +128,7 @@ describe Commandable do
 
     it "doesn't clear screen if colors are turned off" do
       Commandable.color_output = false
+      Commandable.help.join.should_not match /\[2J/
       lambda {Commandable.screen_clear = "\e[J"}.should_not change{Commandable.help}
     end
 
