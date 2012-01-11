@@ -137,6 +137,18 @@ describe Commandable do
             end
           end
           
+          it "honors the single_command_only flag" do
+            begin
+              Commandable.single_command_only = true
+              command_queue = Commandable.execution_queue(["foo", "1", "2.4", "bar", "71"])
+              command_queue.length.should == 1
+              command_queue[0][:method].should == :foo
+              command_queue[0][:parameters].should == ["1", "2.4", "bar", "71"]
+            ensure
+              Commandable.single_command_only = false
+            end
+          end
+
         end
         
       end

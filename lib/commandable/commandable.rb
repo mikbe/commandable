@@ -26,6 +26,9 @@ module Commandable
     # If optional parameters show default values, true by default
     attr_accessor :verbose_parameters
   
+    # Make commandable only ever try to parse a single command
+    attr_accessor :single_command_only
+
     # Boolean: If help/usage messages will print in color
     attr_accessor :color_output
     # What color the app_info text will be in the help message
@@ -182,7 +185,7 @@ module Commandable
       # Parse the command line into methods and their parameters
       
       arguments.each do |arg|
-        if Commandable[arg]
+        if Commandable[arg] && (!@single_command_only || !last_method)
           last_method = arg.to_sym
           method_hash.merge!(last_method=>[])
         else
