@@ -128,7 +128,7 @@ module Commandable
       array << header_text
       
       array += @@commands.keys.collect do |key|
-        default = (@@default_method and key == @@default_method.keys[0]) ? @color_bold : ""
+        default = (@@default_method and key == @@default_method.keys[0]) ? @c_bold : ""
         
         help_line  = " #{" "*(max_command-key.length)}#{@c_command + default + key.to_s + @c_reset}"+
                      " #{default + @c_parameter + @@commands[key][:argument_list] + @c_reset}"
@@ -256,7 +256,7 @@ module Commandable
       Term::ANSIColorHI.coloring = color_output
       c = Term::ANSIColorHI
       @color_app_info           = c.intense_white  + c.bold
-      @color_app_exe           = c.intense_green  + c.bold
+      @color_app_exe            = c.intense_green  + c.bold
       @color_command            = c.intense_yellow
       @color_description        = c.intense_white
       @color_parameter          = c.intense_cyan
