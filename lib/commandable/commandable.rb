@@ -155,7 +155,7 @@ module Commandable
         command_queue = execution_queue(argv)
         command_queue.each do |com|
           return_value = com[:proc].call
-          puts return_value unless silent
+          puts return_value if !silent || com[:method] == :help
         end
       rescue SystemExit => kernel_exit
         Kernel.exit kernel_exit.status
