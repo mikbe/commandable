@@ -126,6 +126,12 @@ describe Commandable do
       lambda {Commandable.color_output = false}.should change{Commandable.help}
     end
 
+    it "doesn't clear screen if colors are turned off" do
+      Commandable.color_output = false
+      Commandable.help.join.should_not match /\[2J/
+      lambda {Commandable.screen_clear = "\e[J"}.should_not change{Commandable.help}
+    end
+
     context "when a specific setting's color is changed" do
       
       before(:each) { Commandable.color_output = true } 
@@ -153,6 +159,10 @@ describe Commandable do
 
       context "when color_usage is changed" do
         specify {lambda {Commandable.color_usage = c.black}.should change{Commandable.help}}
+      end
+
+      context "when screen_clear is changed" do
+        specify {lambda {Commandable.screen_clear = "\e[J"}.should change{Commandable.help}}
       end
 
       context "when there is an error" do
