@@ -43,7 +43,7 @@ module Commandable
       command "Copies the test classes to a folder so\nyou can see a bunch of small examples"
       # Copies the test classes to a folder so you can see a bunch of small examples
       def examples(path="./examples")
-        FileUtils.copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)
+        copy_dir(File.expand_path(File.dirname(__FILE__) + '/../../spec/source_code_examples'),path)
       end
 
       command "Will raise a programmer error, not a user error\nso you can see what happens when you have bad code"
@@ -59,8 +59,19 @@ module Commandable
       end
       command "Application Version", :xor
       alias :version :v
+    
+      private 
+      
+      def copy_dir(source, dest)
+        files = Dir.glob("#{source}/**")
+        mkdir_p dest
+        cp_r files, dest
+      end
+
       
     end
+    
+    
     
   end
   

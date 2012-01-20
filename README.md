@@ -38,7 +38,7 @@ Thanks for your help.
 
 ## Latest version
 
-2011-09-27 - Version: 0.2.3  
+2012-01-20 - Version: 0.2.4  
 
 See change history for specific changes.  
 
@@ -426,6 +426,12 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 
 ## Version History ##
+
+2012-01-20 - Version: 0.2.4  
+
+* Fixed bug that disabled help output in silent mode. (fixed by [John Sumsion](https://github.com/jdsumsion))
+* Added ability to disable screen clearing. [John Sumsion](https://github.com/jdsumsion)
+* Removed monkey patch to FileUtils. It was more philosophical than necessary.
 
 2011-09-27 - Version: 0.2.3  
 
