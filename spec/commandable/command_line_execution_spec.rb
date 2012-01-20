@@ -50,6 +50,12 @@ describe Commandable do
           lambda{execute_queue(["fly", "navy"])}.should raise_error(Commandable::UnknownCommandError)
         end
       end
+
+      context "and even when silent is on" do
+        it "prints usage/help instructions" do
+          capture_output{Commandable.execute(["help"], :silent)}.to_s.should match(/Usage:/)
+        end
+      end
     
       context "and running commands automatically via execute" do
         
