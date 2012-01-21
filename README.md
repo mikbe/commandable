@@ -416,10 +416,11 @@ Most of all it should be simple to use so if you have any problems please drop m
 * Removed monkey patch from FileUtils. It was more philosophical than necessary.
 * Changed terminal coloring gem back to official the term-ansicolor from my own fork now that my changes have been pulled into it.
 * Code clean up. While mostly not a real refactor I've separated out the code into functional groups (aka files).
+* Removed Widget example - it was making the examples too tightly coupled to HashModel.
+* Removed Cucumber features.
 
 To do
 
-* Removed Widget example - which was making the examples too tightly coupled to HashModel.
 * Added some more examples.
 * Updated docs to reflect changes.
 
