@@ -76,5 +76,3 @@ module Commandable
   end
   
 end
-
-

@@ -69,7 +69,10 @@ describe Commandable do
 
     it "adds (default) to the end of the default command description when printing" do
       load 'default_method.rb'
-      Commandable.help.to_s.should match(/\(default\)/)
+      Commandable.color_output = true
+      Commandable.help.join.should match(/\(default\)/)
+      Commandable.color_output = false
+      Commandable.help.join.should match(/\(default\)/)
     end
 
     context "and there are no parameters" do
@@ -84,7 +87,6 @@ describe Commandable do
         Commandable.app_exe = "fakeapp"
         execute_output_s([]).should_not match(/\[parameters\]/)
       end
-
 
     end
     
@@ -102,79 +104,6 @@ describe Commandable do
       
     end
     
-  end
-
-  context "when using color_output" do
-
-    before(:each) do 
-      load 'private_methods_bad.rb'
-      Commandable.app_exe = "mycoolapp"
-      Commandable.app_info = 
-"""  My Cool App - It does stuff and things!
-  Copyright (c) 2011 Acme Inc."""
-    end
-
-    let(:c) {Term::ANSIColorHI}
-    
-    it "changes the output if color is enabled" do
-      Commandable.color_output = false
-      lambda {Commandable.color_output = true}.should change{Commandable.help}
-    end
-
-    it "resets text to plain if colors are turned off" do
-      Commandable.color_output = true
-      lambda {Commandable.color_output = false}.should change{Commandable.help}
-    end
-
-    it "doesn't clear screen if colors are turned off" do
-      Commandable.color_output = false
-      Commandable.help.join.should_not match /\[2J/
-      lambda {Commandable.screen_clear = "\e[J"}.should_not change{Commandable.help}
-    end
-
-    context "when a specific setting's color is changed" do
-      
-      before(:each) { Commandable.color_output = true } 
-
-      # This seems ripe for meta-zation
-      context "when app_info is changed" do
-        specify {lambda {Commandable.color_app_info = c.black}.should change{Commandable.help}}
-      end
-
-      context "when app_exe is changed" do
-        specify {lambda {Commandable.color_app_exe = c.black}.should change{Commandable.help}}
-      end
-
-      context "when color_command is changed" do
-        specify {lambda {Commandable.color_command = c.black}.should change{Commandable.help}}
-      end
-
-      context "when color_description is changed" do
-        specify {lambda {Commandable.color_description = c.black}.should change{Commandable.help}}
-      end
-
-      context "when color_parameter is changed" do
-        specify {lambda {Commandable.color_parameter = c.black}.should change{Commandable.help}}
-      end
-
-      context "when color_usage is changed" do
-        specify {lambda {Commandable.color_usage = c.black}.should change{Commandable.help}}
-      end
-
-      context "when screen_clear is changed" do
-        specify {lambda {Commandable.screen_clear = "\e[J"}.should change{Commandable.help}}
-      end
-
-      context "when there is an error" do
-        
-        specify { lambda {Commandable.color_error_word = c.magenta}.should change{capture_output{Commandable.execute(["fly", "navy"])}}}
-        specify { lambda {Commandable.color_error_name = c.intense_red}.should change{capture_output{Commandable.execute(["fly", "navy"])}}}
-        specify { lambda {Commandable.color_error_description = c.black + c.bold}.should change{capture_output{Commandable.execute(["fly", "navy"])}}}
-        
-      end
-      
-    end
-
   end
 
 end

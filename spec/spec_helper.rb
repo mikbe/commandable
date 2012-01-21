@@ -12,7 +12,7 @@ require 'commandable'
 
 # A note on the specs:
 # Since Commandable uses singletons the tests sometimes get confused about their state.
-# I'm working on a way to properly clear every thing out of memory before each test but tests
+# I'm working on a way to properly clear everything out of memory before each test but tests
 # doesn't pass in autotest try running the test again or run rspec yourself and they'll pass.
 
 # Debug print

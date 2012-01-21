@@ -14,31 +14,14 @@ The whole process can take as little as four lines of code:
 
 Now any method you want to make accessible from the command line requires just a single line of code and it's right where your method is so it's easy to find when you do want to change some functionality.
 
-Don't think of **Commandable** as a way to add command line switches, it's much more than that. Think of it as a way to allow your app to be driven directly from the command line. 
+Don't think of **Commandable** as a way to add command line switches, think of it as a way to allow your app to be driven directly from the command line in a natural language kind of way. 
 
 You can now "use your words" to let people interact with your apps in a natural way. No more confusing switches that mean one thing in one program and something completely different in another. Can you believe some apps actually use `-v` for something other than "version" and `-h` for something other than "help?" Madness I say! Madness!
 
 
-## Testing for a Better Tomorrow ##
-
-In an effort to make the best possible software I'm asking anyone that would like to help out to run the BDD/TDD tests included with the gem. If you don't already have the `rubygems-test` gem installed please install it:
-
-    $ gem install rubygems-test
-
-And then run the tests on your machine:
-
-    $ gem test commandable
-
-And of course upload them when it asks you if it can. You can take a look at the test results yourself here:
-
-<http://test.rubygems.org/gems/commandable/v/0.2.0>
-
-Thanks for your help.
-
-
 ## Latest version
 
-2012-01-20 - Version: 0.2.4  
+2012-01-20 - Version: 0.3.0  
 
 See change history for specific changes.  
 
@@ -48,8 +31,8 @@ I've tried to follow the principle of least surprise so Commandable should just 
 
 ## Requirements ##
 
-* Ruby 1.9.2
-* OS X or any Posix OS (It works, mostly, on Windows but ironically some of the tests won't run because of some Unix commands I use in the tests)
+* Ruby 1.9.2 or greater
+* OS X or any Posix OS (It works, mostly, on Windows but it won't pass the tests because of some Unix commands I use in the tests but no in the code base)
 
 ## Installation  
 From the command line:  
@@ -218,20 +201,14 @@ A typical help output looks something like this:
       readme            : displays the readme file (default)
            v            : <xor> Application Version
      version            : <xor> Application Version
-      widget [path]     : Downloads a fully working app demonstrating how
-                          to use Commandable with RSpec and Cucumber
         help            : you're looking at it now
 
 
 
 ### Complete demonstration app and some example classes ###
-For a fully working example with RSpec and Cucumber tests run this command:
+**Commandable** uses **Commandable** for its own command line options so you can look at the `lib/commandable/app_controller.rb` class for an example.  
 
-    $ commandable widget [path]
-
-In addition **Commandable** uses **Commandable** for its own command line options so you can also look at the `lib/commandable/app_controller.rb class` for an example.  
-
-If you would like to see a bunch of simple classes that demonstrate **Commandable**'s uses run:
+If you would like to see a bunch of simple classes that demonstrate how to use **Commandable** run:
 
     $ commandable examples [path]
 
@@ -262,18 +239,18 @@ If set to true help instructions will include the default values in the paramete
 
 ### Colorized Output Options
 
-The help information can be colored using the standard ANSI escape commands found in the `term-ansicolor-hi` gem. The `term-ansicolor-hi` gem it installed as a dependency but just in case you have problems you can install it yourself by running:
+The help information can be colored using the standard ANSI escape commands found in the `term-ansicolor` gem. The `term-ansicolor` gem is installed as a dependency but just in case you have problems you can install it yourself by running:
 
-    $ [sudo] gem install term-ansicolor-hi
+    $ [sudo] gem install term-ansicolor
 
 Then you can do something like this:
 
-    require 'term/ansicolorhi'
+    require 'term/ansicolor'
     
-    c = Term::ANSIColorHI
+    c = Term::ANSIColor
     
     Commandable.color_app_info           = c.intense_white  + c.bold
-    Commandable.color_app_exe           = c.intense_green  + c.bold
+    Commandable.color_app_exe            = c.intense_green  + c.bold
     Commandable.color_command            = c.intense_yellow
     Commandable.color_description        = c.intense_white
     Commandable.color_parameter          = c.intense_cyan
@@ -322,9 +299,12 @@ _default = intense\_cyan_
 The color the friendly name of the error will be in error messages
 
 **Commandable.color\_error\_description**  
-_default = intense\_black_ + bold  
+\_default = intense\_black_ + bold  
 The color the error description will be in error messages
 
+**Commandable.color\screen\_clear_code**  
+_default = "\e[H\e[2J"
+The color the error description will be in error messages
 
 The best way to see what all this means it just type `commandable help` and you'll see the help instructions in color.
 
@@ -427,11 +407,21 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 ## Version History ##
 
-2012-01-20 - Version: 0.2.4  
+2012-01-20 - Version: 0.3.0 
 
+* Added ability to disable screen clearing and to set your own screen clear escape code. (Based on [John Sumsion](https://github.com/jdsumsion)'s idea)
+* Decoupled screen clearing from coloring; you can have either or both.
 * Fixed bug that disabled help output in silent mode. (fixed by [John Sumsion](https://github.com/jdsumsion))
-* Added ability to disable screen clearing. [John Sumsion](https://github.com/jdsumsion)
-* Removed monkey patch to FileUtils. It was more philosophical than necessary.
+* Fixed bug that didn't label the default method if screen colors were off.
+* Removed monkey patch from FileUtils. It was more philosophical than necessary.
+* Changed terminal coloring gem back to official the term-ansicolor from my own fork now that my changes have been pulled into it.
+* Code clean up. While mostly not a real refactor I've separated out the code into functional groups (aka files).
+
+To do
+
+* Removed Widget example - which was making the examples too tightly coupled to HashModel.
+* Added some more examples.
+* Updated docs to reflect changes.
 
 2011-09-27 - Version: 0.2.3  
 

@@ -1,9 +1,12 @@
+require 'term/ansicolor'
+
 module Commandable
 
   class << self
 
-    # Boolean: If help/usage messages will print in color
+    # If the output will be colorized or not
     attr_accessor :color_output
+
     # What color the app_info text will be in the help message
     attr_accessor :color_app_info
     # What color the app_exe will be in the usage line in the help message
@@ -24,16 +27,17 @@ module Commandable
     # What color the error description will be in error messages
     attr_accessor :color_error_description
 
+    # If the screen should be cleared before printing help
+    attr_accessor :clear_screen
+
     # What escape code will be used to clear screen
-    attr_accessor :screen_clear
-
-    # Set colors to their default values
+    attr_accessor :clear_screen_code
+    
     def reset_colors
-      @color_output      ||= true
+      @color_output = false
 
-      # Build the default colors
-      Term::ANSIColorHI.coloring = color_output
-      c = Term::ANSIColorHI
+      #Term::ANSIColor.coloring = true
+      c = Term::ANSIColor
       @color_app_info           = c.intense_white  + c.bold
       @color_app_exe            = c.intense_green  + c.bold
       @color_command            = c.intense_yellow
@@ -47,15 +51,18 @@ module Commandable
     
       @color_bold               = c.bold
       @color_reset              = c.reset
-
-      @screen_clear             = "\e[H\e[2J"
+    end
+    
+    def reset_screen_clearing
+      @clear_screen = false
+      @clear_screen_code = "\e[H\e[2J"
     end
 
     private
     
     # Changes the colors used when print the help/usage instructions to those set by the user.
     def set_colors
-      if color_output
+      if @color_output 
         @c_app_info           = @color_app_info
         @c_app_exe            = @color_app_exe
         @c_command            = @color_command
@@ -69,12 +76,19 @@ module Commandable
       
         @c_bold               = @color_bold
         @c_reset              = @color_reset
-        @s_clear              = @screen_clear
       else
         @c_app_info, @c_app_exe, @c_command, 
         @c_description, @c_parameter, @c_usage, 
         @c_bold, @c_reset, @c_error_word, 
-        @c_error_name, @c_error_description, @s_clear = [""]*12
+        @c_error_name, @c_error_description = [""]*11
+      end
+    end
+
+    def set_screen_clear
+      if @clear_screen
+        @s_clear_screen_code = @clear_screen_code 
+      else
+        @s_clear_screen_code = ""
       end
     end
 
