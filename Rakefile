@@ -12,12 +12,8 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = true
 end
 
-Cucumber::Rake::Task.new(:cucumber) do |t|
-  t.cucumber_opts = %w{--tags ~@jruby} unless defined?(JRUBY_VERSION)
-end
-
 task :default => [:test, :build]
-task :test =>[:cucumber, :spec]
+task :test =>[:spec]
 
 task :clobber do
   rm_rf 'pkg'
