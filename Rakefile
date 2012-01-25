@@ -2,7 +2,7 @@ require 'bundler'
 Bundler::GemHelper.install_tasks
 
 require 'rake'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rspec/core/rake_task'
 require 'cucumber/rake/task'
 
