@@ -18,7 +18,7 @@ module Commandable
   
   end
     
-  # Inititialize Commandable's settings when it's first loaded
+  # Inititializes Commandable's settings when it's first loaded
   reset_all
 
 end

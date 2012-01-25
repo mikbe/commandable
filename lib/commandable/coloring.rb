@@ -30,9 +30,10 @@ module Commandable
     # If the screen should be cleared before printing help
     attr_accessor :clear_screen
 
-    # What escape code will be used to clear screen
+    # What escape code will be used to clear the screen
     attr_accessor :clear_screen_code
     
+    # Resets colors to their default values and disables color output
     def reset_colors
       @color_output = false
 
@@ -53,6 +54,7 @@ module Commandable
       @color_reset              = c.reset
     end
     
+    # Resets the escape code used for screen clearing and disables screen clearing.
     def reset_screen_clearing
       @clear_screen = false
       @clear_screen_code = "\e[H\e[2J"
@@ -60,7 +62,7 @@ module Commandable
 
     private
     
-    # Changes the colors used when print the help/usage instructions to those set by the user.
+    # Changes the colors used when printing the help/usage instructions to those set by the user.
     def set_colors
       if @color_output 
         @c_app_info           = @color_app_info
@@ -84,6 +86,7 @@ module Commandable
       end
     end
 
+    # Changes the screen clearing code used when printing the help/usage instructions to the one set by the user.
     def set_screen_clear
       if @clear_screen
         @s_clear_screen_code = @clear_screen_code 

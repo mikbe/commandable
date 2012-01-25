@@ -1,5 +1,6 @@
+# :nodoc:
 module Commandable
-  module VERSION # :nodoc:
+  module VERSION
     MAJOR  = 0
     MINOR  = 3
     TINY   = 0

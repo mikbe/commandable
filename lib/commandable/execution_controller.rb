@@ -78,7 +78,6 @@ module Commandable
           end
         end
       end
-      #puts "method_hash: #{method_hash}" if method_hash.to_s.include?("required_default")
       
       # Build an array of procs to be called for each method and its given parameters
       proc_array = []

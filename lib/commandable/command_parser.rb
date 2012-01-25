@@ -1,8 +1,5 @@
 require 'set'
 
-# Extending your class with this module allows you to 
-# use the #command method above your method. 
-# This makes them executable from the command line.
 module Commandable
 
   class << self

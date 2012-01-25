@@ -1,3 +1,6 @@
+# Extending your class with this module allows you to 
+# use the #command method above your method. 
+# This makes them executable from the command line.
 module Commandable
 
   # A helper to display the read me file and generate an example app
@@ -34,6 +37,7 @@ module Commandable
 
       private 
 
+      # Copy a directy and its contents
       def copy_dir(source, dest)
         files = Dir.glob("#{source}/**")
         mkdir_p dest
