@@ -2,6 +2,7 @@
 $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + "/../lib")
 require 'commandable'
 Commandable.color_output = true
+Commandable.clear_screen = true
 Commandable.verbose_parameters = false
 Commandable.app_exe = "commandable"
 Commandable.app_info =  

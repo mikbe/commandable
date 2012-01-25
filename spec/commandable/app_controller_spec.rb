@@ -18,6 +18,9 @@ describe Commandable do
     # or it won't be able to use the settings
     load 'commandable/app_controller.rb'
   }
+    
+  it "should have a test for examples"
 
+  it "should have a test for the readme file"
 
 end

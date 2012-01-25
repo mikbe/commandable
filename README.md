@@ -48,16 +48,26 @@ After installing the **Commandable** gem require it somewhere that gets loaded b
 
 Extend your class with the **Commandable** module:  
     
-    class Widget
+    require 'commandable'
+    
+    class Foo
       extend Commandable
+      
+    end
     
 Then put `command` and a description above the method you want to make accessible. The description is optional but can be helpful
 since it's used when automatically building your help/usage instructions.  
 
-      command "create a new widget"
-      def new(name)
-        ...
+    require 'commandable'
+    
+    class Foo
+      extend Commandable
+      
+      command "Explain what the command does"
+      def bar
+        puts "Foo::bar"
       end
+    end
 
 ### The "`command`" command and its options
 
@@ -201,8 +211,7 @@ A typical help output looks something like this:
       readme            : displays the readme file (default)
            v            : <xor> Application Version
      version            : <xor> Application Version
-        help            : you're looking at it now
-
+        help            : you're looking at it now 
 
 
 ### Complete demonstration app and some example classes ###
@@ -237,6 +246,16 @@ If set to true help instructions will include the default values in the paramete
     # Will print:
     command arg1 [arg2]
 
+###Screen Clearing Options
+
+**Commandable.clear\_screen**  
+_default = false_  
+Set to true to enable clearing the screen when printing help/usage instructions.  
+
+**Commandable.color\clear\_screen\_code**  
+_default = "\e[H\e[2J"
+The escape codes used to clear the screen.
+
 ### Colorized Output Options
 
 The help information can be colored using the standard ANSI escape commands found in the `term-ansicolor` gem. The `term-ansicolor` gem is installed as a dependency but just in case you have problems you can install it yourself by running:
@@ -263,8 +282,8 @@ Then you can do something like this:
 ###Color options 
 
 **Commandable.color\_output**  
-_default = true_  
-Set to false to disable colorized help/usage instructions. You might find the colors really, really annoying...
+_default = false_  
+Set to true to enable colorized help/usage instructions.  
 
 **Commandable.color\_app\_info**  
 _default = intense\_white_ + bold  
@@ -302,12 +321,7 @@ The color the friendly name of the error will be in error messages
 \_default = intense\_black_ + bold  
 The color the error description will be in error messages
 
-**Commandable.color\screen\_clear_code**  
-_default = "\e[H\e[2J"
-The color the error description will be in error messages
-
 The best way to see what all this means it just type `commandable help` and you'll see the help instructions in color.
-
 
 ### Executing the Command Line
 
@@ -380,7 +394,6 @@ You just need to configure your bin file with the app settings and then run `Com
 
     # Make sure you require your app after Commandable, or use
     # a configuration file to load the settings then your app
-    # See the Widget app for an example of this.
     require 'yourappname'
     Commandable.execute(ARGV)
     
@@ -390,9 +403,7 @@ You just need to configure your bin file with the app settings and then run `Com
     # Commandable.execute(ARGV, :silent)
  
 
-I actually prefer to create a separate file for my **Commandable** configuration and load it in my main app  file in the `lib` directory. Again, take a look at `Widget` to see what I mean. 
-
-You can get a copy of widget by running `commandable widget [path]` and it will copy the example app to the directory you specify.
+I actually prefer to create a separate file for my **Commandable** configuration and load it in my main app file in the `lib` directory.
 
 ## In closing... ##
 
@@ -409,6 +420,7 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 2012-01-20 - Version: 0.3.0 
 
+* All features are off by default to make Commandable more friendly across platforms.
 * Added ability to disable screen clearing and to set your own screen clear escape code. (Based on [John Sumsion](https://github.com/jdsumsion)'s idea)
 * Decoupled screen clearing from coloring; you can have either or both.
 * Fixed bug that disabled help output in silent mode. (fixed by [John Sumsion](https://github.com/jdsumsion))
@@ -416,13 +428,9 @@ Most of all it should be simple to use so if you have any problems please drop m
 * Removed monkey patch from FileUtils. It was more philosophical than necessary.
 * Changed terminal coloring gem back to official the term-ansicolor from my own fork now that my changes have been pulled into it.
 * Code clean up. While mostly not a real refactor I've separated out the code into functional groups (aka files).
-* Removed Widget example - it was making the examples too tightly coupled to HashModel.
+* Removed Widget gem example - it was making the examples too tightly coupled to HashModel.
 * Removed Cucumber features.
 
-To do
-
-* Added some more examples.
-* Updated docs to reflect changes.
 
 2011-09-27 - Version: 0.2.3  
 
@@ -444,28 +452,19 @@ To do
 
 * First public release. It's 0.2.0 because 0.1.0, going by the name of Cloptions, wasn't released.
 
-## To Do
+### Possible future upgrades/improvements
 
-Add ability to easily use nested argument trees without hard-coding case blocks. For instance a command that takes set of commands like `foo remote set "ftp_svr" 10.250.1.100` or `foo remote delete "ftp_svr"`.
-
-### Next major version:
-
+* See if there's a elegant way to add nested argument trees without case blocks. e.g. a command that takes set of commands like `foo remote set "ftp_svr" 10.250.1.100` and `foo remote delete "ftp_svr"`.
 * Add a way to use or discover version numbers. Might have to force standardization and not allow configuration since it should be DRY.
-* Needs a massive refactoring.
 * Add a generator to automatically add Commandable support to your app.
-* Reorganize docs to be more logical and less the result of my scribblings as I develop.
-* Try to figure out how to trap `alias` so I don't you don't have to use  an additional `command`.
-* Better formatting of help/usage instructions, the existing one is fairly ugly.
-* Use comments below `command` as the description text so you don't have to repeat yourself to get RDoc to give you docs for your functions.
+* Try to figure out how to trap `alias` so you don't have to use  an additional `command`.
+* Use comments below `command` as the description text so you don't have to repeat yourself when documenting your code.
 * Clean up RSpecs. I'm doing too many ugly tests instead of specifying behavior.
-* Allow sorting of commands alphabetically or by priority
-
-###Future versions:
-
-* Accepting your suggestions...
+* Allow sorting of commands alphabetically or by priority in the help output
 * Make the help/usage directions format available to programmers without having to hack the code.
 * More edge case testing.
 * Allow optional parameters values to be reloaded so changing things like verbose_parameters makes the command list change. (**very** low priority)
+* Accepting your suggestions...
 
 
 .

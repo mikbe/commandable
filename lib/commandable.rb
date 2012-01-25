@@ -1,10 +1,10 @@
 # This library allows you to incredibly easily make 
 # your methods directly available from the command line.
 #
-# Author::    Mike Bethany  (mailto:mikbe.tk@gmail.com)
-# Copyright:: Copyright (c) 2012 Mike Bethany
-# License::   Distributed under the MIT licence (See LICENCE file)
-
+# Author::     Mike Bethany  (mailto:mikbe.tk@gmail.com)
+# Copyright::  Copyright (c) 2012 Mike Bethany
+# License::    Distributed under the MIT licence (See LICENCE file)
+# website::    http://mikbe.kt
 
 require 'commandable/version'
 require 'commandable/exceptions'
@@ -13,4 +13,5 @@ require 'commandable/argument_parser'
 require 'commandable/coloring'
 require 'commandable/help_text'
 require 'commandable/command_parser'
+require 'commandable/execution_controller'
 require 'commandable/controller'
