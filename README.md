@@ -422,7 +422,7 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 * All features are off by default to make Commandable more friendly across platforms.
 * Added ability to disable screen clearing and to set your own screen clear escape code. (Based on [John Sumsion](https://github.com/jdsumsion)'s idea)
-* Decoupled screen clearing from coloring; you can have either or both.
+* Decoupled screen clearing from coloring; you can have neither, either, or both.
 * Fixed bug that disabled help output in silent mode. (fixed by [John Sumsion](https://github.com/jdsumsion))
 * Fixed bug that didn't label the default method if screen colors were off.
 * Removed monkey patch from FileUtils. It was more philosophical than necessary.
