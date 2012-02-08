@@ -24,6 +24,7 @@ module Commandable
     # Clears all methods from the list of available commands
     # This is mostly useful for testing.
     def clear_commands
+      @@command_options = nil
       @@commands = HELP_COMMAND.dup
     end
     

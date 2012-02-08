@@ -21,7 +21,7 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Latest version
 
-2012-01-20 - Version: 0.3.0  
+2012-02-07 - Version: 0.3.1  
 
 See change history for specific changes.  
 
@@ -417,6 +417,10 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 
 ## Version History ##
+
+2012-02-07 - Version: 0.3.1
+
+* Fixed bug where an error was raised if a non-commandable method was before a commandable method (uninitialized class variable @@command_options)
 
 2012-01-20 - Version: 0.3.0 
 

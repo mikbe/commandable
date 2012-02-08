@@ -3,6 +3,10 @@ require "commandable"
 class ParameterClass
   extend Commandable
 
+  def non_command_method
+    puts "this shouldnt matter"
+  end
+
   command "hello world"
   def foo(int_arg1, number_arg2)
     [int_arg1, number_arg2]
