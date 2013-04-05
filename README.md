@@ -21,9 +21,9 @@ You can now "use your words" to let people interact with your apps in a natural 
 
 ## Latest version
 
-2012-02-07 - Version: 0.3.1  
+2013-03-04 - Version: 0.3.2  
 
-See change history for specific changes.  
+Verified works with Ruby 2.0
 
 ## Principle of Least Surprise
 
@@ -31,7 +31,7 @@ I've tried to follow the principle of least surprise so Commandable should just 
 
 ## Requirements ##
 
-* Ruby 1.9.2 or greater
+* Ruby 1.9.3 or greater (Ruby 2.0 supported)
 * OS X or any Posix OS (It works, mostly, on Windows but it won't pass the tests because of some Unix commands I use in the tests but no in the code base)
 
 ## Installation  
@@ -417,6 +417,10 @@ Most of all it should be simple to use so if you have any problems please drop m
 
 
 ## Version History ##
+
+2013-04-04 - Version: 0.3.2
+
+* Works with Ruby 2.0
 
 2012-02-07 - Version: 0.3.1
 

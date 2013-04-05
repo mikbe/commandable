@@ -96,6 +96,7 @@ module Commandable
         raise SyntaxError, "A command was specified but no method follows"
       end
     }
+    
   end
 
   # Add a method to the list of available command line methods
