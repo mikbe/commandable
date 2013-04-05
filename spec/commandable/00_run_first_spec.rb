@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# This tests MUST run first to be valid
+# These tests MUST run first to be valid
 
 describe Commandable do
 

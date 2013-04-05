@@ -9,7 +9,7 @@ describe Commandable do
     before(:each) { load 'test_class.rb' }
 
     it "should use ARGV by default" do
-      expect {capture_output{Commandable.execute()}}.should_not raise_error(ArgumentError)
+      expect {capture_output{Commandable.execute()}}.to_not raise_error(ArgumentError)
     end
 
   end

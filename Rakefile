@@ -4,7 +4,6 @@ Bundler::GemHelper.install_tasks
 require 'rake'
 require 'rdoc/task'
 require 'rspec/core/rake_task'
-require 'cucumber/rake/task'
 
 desc "Run all examples"
 RSpec::Core::RakeTask.new(:spec) do |t|

@@ -19,9 +19,9 @@ EOF
 
   s.license = 'MIT'
 
-  s.add_dependency("term-ansicolor", "~>1.0.7")
+  s.add_dependency("term-ansicolor", "~>1.1")
   
-  s.add_development_dependency("rspec", "~>2.5")
+  s.add_development_dependency("rspec", "~>2.13")
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {spec,autotest}/*`.split("\n")

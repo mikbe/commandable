@@ -39,20 +39,15 @@ module Commandable
 
   private 
   
-  # This is where the magic happens!
-  # It lets you add a method to the list of command line methods
-  def command(*cmd_parameters)
-
+  def init_properties
     @@attribute = nil
     @@method_file = nil
     @@method_line = nil
-    @@command_options = {}
-    
-    # Include Commandable in singleton classes so class level methods work
-    include Commandable unless self.include? Commandable
-    
-    # parse command parameters
-    while (param = cmd_parameters.shift)
+    @@command_options = {}   
+  end
+  
+  def parse_parameters(params)
+    while (param = params.shift)
       case param
         when Symbol
           if param == :xor
@@ -67,6 +62,19 @@ module Commandable
       end
     end
     @@command_options[:priority] ||= 0
+  end
+  
+  # This is where the magic happens!
+  # It lets you add a method to the list of command line methods
+  def command(*cmd_parameters)
+
+    init_properties
+    
+    # Include Commandable in singleton classes so class level methods work
+    include Commandable unless self.include? Commandable
+    
+    # parse command parameters
+    parse_parameters(cmd_parameters)
     
     # only one default allowed
     raise ConfigurationError, "Only one default method is allowed."  if @@default_method and @@command_options[:default]
